@@ -7,6 +7,7 @@ find_package(SDL2 REQUIRED)
 
 set(SOURCES
     src/main.cpp
+    src/graphics.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
