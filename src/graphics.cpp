@@ -79,8 +79,10 @@ SDL_Surface* loadSurface(std::string file_name)
 void close()
 {
     //Deallocate surface
-    //SDL_FreeSurface(gHelloWorld);
-    //gHelloWorld = NULL;
+	for (int i = 0; i < KEY_PRESS_SURFACE_TOTAL; ++i) {
+		SDL_FreeSurface(gKeyPressSurfaces[i]);
+		gKeyPressSurfaces[i] = nullptr;
+	}
 
     //Destroy window
     SDL_DestroyWindow(gWindow);
