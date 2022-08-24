@@ -10,7 +10,6 @@ int main(int argc, char* args[])
 	bool quit = false;
 	//Event handler
 	SDL_Event e;
-	gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
     //Start up SDL and create window
     if (!init()) {
         printf("Failed to initialize!\n");
@@ -29,27 +28,15 @@ int main(int argc, char* args[])
 			if (e.type == SDL_QUIT) {
 				quit = true;
 			}
-			else if (e.type == SDL_KEYDOWN) {
-				//Select surfaces based on key press
-				switch(e.key.keysym.sym) {
-					case SDLK_LEFT:
-					gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT];
-					break;
-
-					case SDLK_RIGHT:
-					gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT];
-					break;
-
-					default:
-					gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT];
-					break;
-				}
-			}
 		}
-		//Apply the current image
-        SDL_BlitSurface(gCurrentSurface,NULL,gScreenSurface,NULL);
-        //Update the surface
-        SDL_UpdateWindowSurface(gWindow);
+		//Clear screen
+		SDL_RenderClear(gRenderer);
+
+		//Render texture to screen
+		SDL_RenderCopy(gRenderer,gTexture,NULL,NULL);
+
+		//Update screen
+		SDL_RenderPresent(gRenderer);
 	}
     //Free resources and close SDL
     close();
