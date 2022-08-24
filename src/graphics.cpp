@@ -1,3 +1,4 @@
+#include <SDL_image.h>
 #include "graphics.h"
 
 //The window we'll be rendering to
@@ -28,16 +29,23 @@ bool init()
     else{
         // Create window
         gWindow = SDL_CreateWindow("Lunar Lander", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-        if (gWindow == NULL){
-            printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+        if (gWindow == NULL) {
+            printf("Window could not be created! SDL_Error: %s\n",SDL_GetError());
             success = false;
         }
-        else{
-            // Get window surface
-            gScreenSurface = SDL_GetWindowSurface(gWindow);
+        else {
+            ///Initialize PNG loading
+            int imgFlags = IMG_INIT_PNG;
+            if (!(IMG_Init(imgFlags) & imgFlags)){
+                printf("SDL_image could not initialize! SDL_image Error: %s\n",IMG_GetError());
+                success = false;
+            }
+            else{
+                //Get window surface
+                gScreenSurface = SDL_GetWindowSurface(gWindow);
+            }
         }
     }
-
     return success;
 }
 
@@ -70,9 +78,16 @@ bool loadMedia()
 
 SDL_Surface* loadSurface(std::string file_name)
 {
+    SDL_Surface* optimizedSurface = nullptr;
     //Load splash image
-    SDL_Surface* loadedSurface = SDL_LoadBMP(file_name.c_str());
-    return loadedSurface;
+    SDL_Surface* loadedSurface = IMG_Load(file_name.c_str());
+    if (loadedSurface != nullptr){
+        //Convert surface to screen format
+		optimizedSurface = SDL_ConvertSurface(loadedSurface,gScreenSurface->format,0);
+		//Get rid of old loaded surface
+		SDL_FreeSurface(loadedSurface);
+	}
+    return optimizedSurface;
 }
 
 // Frees media and shuts down SDL
