@@ -11,11 +11,17 @@ abstract PhysicalObject{
     +set_momentum()
     +apply_force()
     +apply_rotation()
-    +get_()
+    +move()
 }
 abstract GraphicalObject{
     #vertice_list
     +draw()
+}
+
+class BackgroundImage{
+    +BacgroundImage()
+    +~BackgrounImage()
+    -generate_random_stars()
 }
 class Game{
     +Game()
@@ -27,18 +33,20 @@ class Game{
 }
 class Lander{
     +fuel
+    +explode()
 }
 class Terrain{
+    -hills_list: list
     -generate()
 }
-class GraphicalWindow{
-    +GraphicalWindow()
-    +~GraphicalWindow()
+class GameWindow{
+    +GameWindow()
+    +~GameWindow()
 }
 class Player{
     +points
     +add_points()
-    +explode()
+    +evaluate_landing()
 }
 class Physics{
     -physical_objects_list
@@ -51,21 +59,20 @@ class LandingZone{
 }
 class UI{
     +update_values()
+    +display_ui()
+    +display_message()
 }
 
 PhysicalObject <|.. Lander
 GraphicalObject <|-- PhysicalObject
 GraphicalObject <|.. Terrain
-Game *-- GraphicalWindow
+Game *-- GameWindow
 Player *-- Lander
 Game *-- Physics
 Game *-- Player
 Game *-- Terrain
 GraphicalObject <|.. LandingZone
-Terrain *- LandingZone
-GraphicalObject -- GraphicalWindow
-PhysicalObject -- Physics
+Terrain *- "1.*"LandingZone
 GraphicalObject <|.. UI
 Game *-- UI
-UI -- Lander
-UI -- Player
+GraphicalObject <|.. BackgroundImage
