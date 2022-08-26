@@ -1,0 +1,71 @@
+@startuml lunar-lander
+title lunar-lander
+abstract PhysicalObject{
+    #weight
+    #position
+    #rotation
+    #speed
+    #momentum
+    +set_position()
+    +set_speed()
+    +set_momentum()
+    +apply_force()
+    +apply_rotation()
+    +get_()
+}
+abstract GraphicalObject{
+    #vertice_list
+    +draw()
+}
+class Game{
+    +Game()
+    +~Game()
+    +start()
+    +finish()
+    +get_user_input()
+    +update()
+}
+class Lander{
+    +fuel
+}
+class Terrain{
+    -generate()
+}
+class GraphicalWindow{
+    +GraphicalWindow()
+    +~GraphicalWindow()
+}
+class Player{
+    +points
+    +add_points()
+    +explode()
+}
+class Physics{
+    -physical_objects_list
+    +update_physics()
+    -check_collisions()
+}
+class LandingZone{
+    +award
+    +get_points()
+}
+class UI{
+    +update_values()
+}
+
+PhysicalObject <|.. Lander
+GraphicalObject <|-- PhysicalObject
+GraphicalObject <|.. Terrain
+Game *-- GraphicalWindow
+Player *-- Lander
+Game *-- Physics
+Game *-- Player
+Game *-- Terrain
+GraphicalObject <|.. LandingZone
+Terrain *- LandingZone
+GraphicalObject -- GraphicalWindow
+PhysicalObject -- Physics
+GraphicalObject <|.. UI
+Game *-- UI
+UI -- Lander
+UI -- Player
