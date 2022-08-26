@@ -10,6 +10,7 @@ set(SOURCES
     src/main.cpp
     src/game.cpp
     src/game_objects.cpp
+    src/graphics.cpp
 )
 
 INCLUDE(FindPkgConfig)
