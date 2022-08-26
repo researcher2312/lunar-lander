@@ -62,13 +62,7 @@ bool loadMedia()
     //Loading success flag
     bool success = true;
 
-    //Load PNG texture
-    gTexture = loadTexture("../graphics/test.png");
-    if (gTexture == NULL ) {
-        printf("Failed to load texture image!\n");
-        success = false;
-    }
-
+    //Nothing to load
     return success;
 }
 
