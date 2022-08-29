@@ -5,6 +5,7 @@
 Game::Game()
 {
     window.add_new_graphical_object(new BackgroundImage);
+    window.add_new_graphical_object(new Terrain);
 }
 
 Game::~Game()

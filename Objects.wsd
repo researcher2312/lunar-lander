@@ -14,13 +14,14 @@ abstract PhysicalObject{
     +move()
 }
 abstract GraphicalObject{
-    +draw(SDL_Renderer*)
+    +{abstract}draw(SDL_Renderer*)
 }
 
 class BackgroundImage{
     +BacgroundImage()
     +~BackgrounImage()
     -generate_random_stars()
+    -stars: array
 }
 class Game{
     +Game()
@@ -35,8 +36,10 @@ class Lander{
     +explode()
 }
 class Terrain{
-    -hills_list: list
-    -generate()
+    -hills: array
+    +Terrain()
+    +Terrain()
+    -generate_hills()
 }
 class GameWindow{
     +GameWindow()
@@ -68,7 +71,7 @@ class UI{
 }
 
 PhysicalObject <|.. Lander
-GraphicalObject <|-- PhysicalObject
+GraphicalObject <|- PhysicalObject
 GraphicalObject <|.. Terrain
 Game *-- GameWindow
 Player *-- Lander
