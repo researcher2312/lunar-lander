@@ -5,6 +5,9 @@ constexpr int SCREEN_HEIGHT = 480;
 
 GameWindow::GameWindow()
 {
+    if (SDL_Init(SDL_INIT_VIDEO)<0) {
+        printf( "SDL could not initialize! SDL_Error: %s\n",SDL_GetError());
+    }
     //Create window
     window = SDL_CreateWindow("Lunar Lander",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH,SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
     if (window == NULL) {
@@ -25,4 +28,18 @@ GameWindow::~GameWindow()
     printf("GameWindow destroyed\n");
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    SDL_Quit();
+}
+
+void GameWindow::update_graphics()
+{
+    //Clear screen
+    SDL_RenderClear(renderer);
+
+    for (std::unique_ptr<GraphicalObject>& rendered_object: graphical_objects) {
+        rendered_object->draw(renderer);
+    }
+
+    //Update screen
+    SDL_RenderPresent(renderer);
 }

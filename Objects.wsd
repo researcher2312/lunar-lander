@@ -14,8 +14,7 @@ abstract PhysicalObject{
     +move()
 }
 abstract GraphicalObject{
-    #vertice_list
-    +draw()
+    +draw(SDL_Renderer*)
 }
 
 class BackgroundImage{
@@ -42,6 +41,11 @@ class Terrain{
 class GameWindow{
     +GameWindow()
     +~GameWindow()
+    -graphical_objects: list
+    -window
+    -renderer
+    +update_graphics()
+    +add_new_graphical_object()
 }
 class Player{
     +points
@@ -49,7 +53,7 @@ class Player{
     +evaluate_landing()
 }
 class Physics{
-    -physical_objects_list
+    -physical_objects: list
     +update_physics()
     -check_collisions()
 }

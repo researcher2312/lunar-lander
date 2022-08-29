@@ -3,16 +3,24 @@
 
 Game::Game()
 {
-    if (SDL_Init(SDL_INIT_VIDEO)<0) {
-        printf( "SDL could not initialize! SDL_Error: %s\n",SDL_GetError());
-    }
+
 }
 
 Game::~Game()
 {
-    SDL_Quit();
 }
 
 void Game::start(){
-    SDL_Delay(10000);
+    bool quit = false;
+    SDL_Event e;
+    while(!quit) {
+        //Handle events on queue
+        while(SDL_PollEvent(&e) != 0){
+            //User requests quit
+            if(e.type == SDL_QUIT) {
+                quit = true;
+            }
+        }
+        window.update_graphics();
+    }
 }
