@@ -29,8 +29,8 @@ BackgroundImage::BackgroundImage()
 
 UI::UI()
 {
-    title_font = TTF_OpenFont("16_true_type_fonts/lazy.ttf",28);
-    ui_font = TTF_OpenFont("16_true_type_fonts/lazy.ttf",28);
+    title_font = TTF_OpenFont("oscilloscope.ttf",28);
+    ui_font = TTF_OpenFont("oscilloscope.ttf",28);
 }
 
 UI::~UI()
@@ -38,6 +38,26 @@ UI::~UI()
     TTF_CloseFont(title_font);
     TTF_CloseFont(ui_font);
 
+}
+
+void UI::prepare_textures(std::string text, SDL_Renderer* renderer)
+{
+    SDL_Surface* textSurface = TTF_RenderText_Solid(title_font, text.c_str(),color::white);
+    if (textSurface == NULL) {
+        printf("Unable to render text surface! SDL_ttf Error: %s\n",TTF_GetError());
+    }
+    else {
+        //Create texture from surface pixels
+        ui_texture = SDL_CreateTextureFromSurface(renderer,textSurface);
+        if (ui_texture == NULL){
+            printf("Unable to create texture from rendered text! SDL Error: %s\n",SDL_GetError());
+        }
+    }
+}
+
+void UI::draw(SDL_Renderer* renderer)
+{
+    SDL_RenderCopy(renderer, ui_texture, NULL, NULL );
 }
 
 void Terrain::generate_random_terrain()

@@ -8,6 +8,9 @@ GameWindow::GameWindow()
     if (SDL_Init(SDL_INIT_VIDEO)<0) {
         printf( "SDL could not initialize! SDL_Error: %s\n",SDL_GetError());
     }
+    if (TTF_Init()<0) {
+        printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+    }
     //Create window
     window = SDL_CreateWindow("Lunar Lander",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH,SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
     if (window == NULL) {
@@ -28,6 +31,7 @@ GameWindow::~GameWindow()
     printf("GameWindow destroyed\n");
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    TTF_Quit();
     SDL_Quit();
 }
 
