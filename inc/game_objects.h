@@ -10,9 +10,9 @@ public:
     GameWindow();
     ~GameWindow();
     void update_graphics();
-    void add_new_graphical_object();
+    void add_new_graphical_object(GraphicalObject*);
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;
-    std::list<std::unique_ptr<GraphicalObject>> graphical_objects;
+    std::list<GraphicalObject*> graphical_objects;
 };

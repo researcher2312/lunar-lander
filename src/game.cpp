@@ -1,16 +1,18 @@
 #include <stdio.h>
+#include <memory>
 #include "game.h"
 
 Game::Game()
 {
-
+    window.add_new_graphical_object(new BackgroundImage);
 }
 
 Game::~Game()
 {
 }
 
-void Game::start(){
+void Game::start()
+{
     bool quit = false;
     SDL_Event e;
     while(!quit) {
@@ -21,6 +23,11 @@ void Game::start(){
                 quit = true;
             }
         }
-        window.update_graphics();
+        update();
     }
+}
+
+void Game::update()
+{
+    window.update_graphics();
 }

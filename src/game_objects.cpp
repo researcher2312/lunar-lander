@@ -18,7 +18,7 @@ GameWindow::GameWindow()
         if (renderer == NULL) {
             printf("Renderer could not be created! SDL Error: %s\n",SDL_GetError());
         }
-        SDL_SetRenderDrawColor(renderer,0xFF,0xFF,0xFF,0xFF);
+        SDL_SetRenderDrawColor(renderer,0x00,0x00,0x00,0xFF);
         SDL_RenderClear(renderer);
     }
 }
@@ -34,12 +34,19 @@ GameWindow::~GameWindow()
 void GameWindow::update_graphics()
 {
     //Clear screen
+    SDL_SetRenderDrawColor(renderer,0x00,0x00,0x00,0xFF);
     SDL_RenderClear(renderer);
 
-    for (std::unique_ptr<GraphicalObject>& rendered_object: graphical_objects) {
+    //draw all objects
+    for (auto rendered_object: graphical_objects) {
         rendered_object->draw(renderer);
     }
 
     //Update screen
     SDL_RenderPresent(renderer);
+}
+
+void GameWindow::add_new_graphical_object(GraphicalObject* new_object)
+{
+    graphical_objects.push_back(new_object);
 }
