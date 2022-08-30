@@ -1,15 +1,19 @@
+#include "game.h"
 #include <stdio.h>
 #include <memory>
-#include "game.h"
 
 Game::Game()
 {
-    window.add_new_graphical_object(new BackgroundImage);
-    window.add_new_graphical_object(new Terrain);
+    ui = new UI(window.get_renderer());
+    ui->prepare_textures("Lunar Lander", TITLE_FONT);
+    window.add_new_graphical_object(&background);
+    window.add_new_graphical_object(&terrain);
+    window.add_new_graphical_object(ui);
 }
 
 Game::~Game()
 {
+    delete ui;
 }
 
 void Game::start()

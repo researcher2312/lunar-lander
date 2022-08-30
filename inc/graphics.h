@@ -8,6 +8,12 @@
 constexpr int STAR_COUNT = 80;
 constexpr int HILLS_COUNT = 200;
 
+enum font_type{
+    TITLE_FONT,
+    UI_FONT,
+    FONT_NUM
+};
+
 namespace color
 {
     constexpr SDL_Color white {255,255,255};
@@ -31,20 +37,21 @@ private:
 
 class UI: public GraphicalObject {
 public:
-    UI();
+    UI(SDL_Renderer*);
     ~UI();
-    void prepare_textures(std::string, SDL_Renderer*);
+    void prepare_textures(std::string, font_type);
     void draw(SDL_Renderer*) final;
 private:
+    int width;
+    int height;
+    SDL_Renderer* renderer;
     SDL_Texture* ui_texture;
-    TTF_Font* ui_font;
-    TTF_Font* title_font;
+    std::array<TTF_Font*, FONT_NUM> fonts;
 };
 
 class Terrain: public GraphicalObject {
 public:
     Terrain();
-    ~Terrain();
     void draw(SDL_Renderer*) final;
 private:
     void generate_random_terrain();

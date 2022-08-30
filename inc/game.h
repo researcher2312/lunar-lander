@@ -13,4 +13,7 @@ public:
     void get_user_input();
 private:
     GameWindow window;
+    UI* ui;
+    BackgroundImage background;
+    Terrain terrain;
 };
