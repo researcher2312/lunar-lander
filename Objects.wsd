@@ -65,13 +65,26 @@ class LandingZone{
     +get_points()
 }
 class UI{
+    -ui_elements: list
+    -fonts: array
+}
+abstract UIElement{
+    -position: SDL_Point
+    -size: SDL_Point
     +update_values()
     +display_ui()
     +display_message()
 }
+class UITextElement{
+    -text:string
+    +set_text()
+}
+class UIGraphicalElement{
+
+}
 
 PhysicalObject <|.. Lander
-GraphicalObject <|- PhysicalObject
+GraphicalObject <|-- PhysicalObject
 GraphicalObject <|.. Terrain
 Game *-- GameWindow
 Player *-- Lander
@@ -80,6 +93,9 @@ Game *-- Player
 Game *-- Terrain
 GraphicalObject <|.. LandingZone
 Terrain *- "1.*"LandingZone
-GraphicalObject <|.. UI
+UI *-- "1.*" UIElement
+GraphicalObject <|.. UIElement
 Game *-- UI
 GraphicalObject <|.. BackgroundImage
+UIElement <|. UITextElement
+UIElement <|.left. UIGraphicalElement

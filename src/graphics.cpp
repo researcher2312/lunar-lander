@@ -1,6 +1,5 @@
 #include "graphics.h"
 #include <random>
-#include <algorithm>
 
 constexpr int SCREEN_WIDTH = 640;
 constexpr int SCREEN_HEIGHT = 480;
@@ -25,43 +24,6 @@ void BackgroundImage::draw(SDL_Renderer* renderer)
 BackgroundImage::BackgroundImage()
 {
     generate_random_stars();
-}
-
-UI::UI(SDL_Renderer* renderer_): renderer{renderer_}
-{
-    fonts[TITLE_FONT] = TTF_OpenFont("../oscilloscope.ttf",35);
-    fonts[UI_FONT] = TTF_OpenFont("../oscilloscope.ttf",15);
-}
-
-UI::~UI()
-{
-    std::for_each(fonts.begin(), fonts.end(), TTF_CloseFont);
-}
-
-void UI::prepare_textures(std::string text, font_type font)
-{
-    SDL_Surface* textSurface = TTF_RenderText_Solid(fonts[font],text.c_str(),color::white);
-    if (textSurface == NULL) {
-        printf("Unable to render text surface! SDL_ttf Error: %s\n",TTF_GetError());
-    }
-    else {
-        //Create texture from surface pixels
-        ui_texture = SDL_CreateTextureFromSurface(renderer,textSurface);
-        if (ui_texture == NULL){
-            printf("Unable to create texture from rendered text! SDL Error: %s\n",SDL_GetError());
-        }
-    }
-    width = textSurface->w;
-    height = textSurface->h;
-    SDL_FreeSurface(textSurface);
-}
-
-void UI::draw(SDL_Renderer* renderer)
-{
-    SDL_Rect render_quad = {200,300,width,height};
-
-    //Render to screen
-    SDL_RenderCopy(renderer,ui_texture,NULL,&render_quad);
 }
 
 void Terrain::generate_random_terrain()

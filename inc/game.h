@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include "game_objects.h"
+#include "ui.h"
 
 class Game {
 public:
@@ -13,7 +14,7 @@ public:
     void get_user_input();
 private:
     GameWindow window;
-    UI* ui;
+    UI ui;
     BackgroundImage background;
     Terrain terrain;
 };

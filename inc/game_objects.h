@@ -1,10 +1,12 @@
 #pragma once
 
-#include "graphics.h"
-#include <SDL.h>
-#include <SDL_ttf.h>
 #include <memory>
 #include <list>
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include "graphics.h"
+#include "ui.h"
+
 
 class GameWindow {
 public:
@@ -17,4 +19,5 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     std::list<GraphicalObject*> graphical_objects;
+    UI ui;
 };

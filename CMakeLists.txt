@@ -11,6 +11,7 @@ set(SOURCES
     src/game.cpp
     src/game_objects.cpp
     src/graphics.cpp
+    src/ui.cpp
 )
 
 INCLUDE(FindPkgConfig)
@@ -26,6 +27,3 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${PROJECT_SOURCE_DIR}/inc
 )
-
-#add_subdirectory(src)
-

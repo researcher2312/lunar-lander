@@ -4,16 +4,13 @@
 
 Game::Game()
 {
-    ui = new UI(window.get_renderer());
-    ui->prepare_textures("Lunar Lander", TITLE_FONT);
     window.add_new_graphical_object(&background);
     window.add_new_graphical_object(&terrain);
-    window.add_new_graphical_object(ui);
+    // window.add_new_graphical_object();
 }
 
 Game::~Game()
 {
-    delete ui;
 }
 
 void Game::start()
