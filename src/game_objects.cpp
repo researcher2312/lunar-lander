@@ -21,6 +21,9 @@ GameWindow::GameWindow()
         if (renderer == NULL) {
             printf("Renderer could not be created! SDL Error: %s\n",SDL_GetError());
         }
+        SDL_Surface* icon = SDL_LoadBMP("../resources/icon.bmp");
+        SDL_SetWindowIcon(window, icon);
+        SDL_FreeSurface(icon);
         SDL_SetRenderDrawColor(renderer,0x00,0x00,0x00,0xFF);
         SDL_RenderClear(renderer);
     }

@@ -28,20 +28,24 @@ protected:
 
 class UITextElement: public UIElement {
 public:
+    std::string text;
+    font_type font;
     void draw(SDL_Renderer*);
-    void set_text(std::string, TTF_Font*, SDL_Renderer*);
+    void set_text(std::string, font_type);
+    void render_text(TTF_Font*, SDL_Renderer*);
 private:
-
 };
 
 class UI {
 public:
     UI();
     ~UI();
+    void set_renderer(SDL_Renderer* renderer_){renderer = renderer_;};
     void draw_ui();
     void add_ui_element(UIElement*);
+    std::array<TTF_Font*, FONT_NUM> fonts;
+
 private:
     SDL_Renderer* renderer;
     std::list<UIElement*> ui_elements;
-    std::array<TTF_Font*, FONT_NUM> fonts;
 };

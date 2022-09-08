@@ -1,12 +1,16 @@
-#include "game.h"
 #include <stdio.h>
 #include <memory>
+#include "game.h"
+#include "ui.h"
 
 Game::Game()
 {
     window.add_new_graphical_object(&background);
     window.add_new_graphical_object(&terrain);
-    // window.add_new_graphical_object();
+    ui.set_renderer(window.get_renderer());
+    auto title = new UITextElement();
+    // title->set_text("Lunar Lander",TITLE_FONT);
+    // ui.add_ui_element(title);
 }
 
 Game::~Game()
@@ -32,4 +36,5 @@ void Game::start()
 void Game::update()
 {
     window.update_graphics();
+    // ui.draw_ui();
 }
