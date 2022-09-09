@@ -1,23 +1,22 @@
 #pragma once
 
-#include <memory>
-#include <list>
-#include <SDL.h>
-#include <SDL_ttf.h>
 #include "graphics.h"
-#include "ui.h"
 
+constexpr int STAR_COUNT = 80;
+constexpr int HILLS_COUNT = 200;
 
-class GameWindow {
+class BackgroundImage: public GraphicalPoints {
 public:
-    GameWindow();
-    ~GameWindow();
-    void update_graphics();
-    void add_new_graphical_object(GraphicalObject*);
-    SDL_Renderer* get_renderer() {return renderer;};
+    BackgroundImage();
 private:
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    std::list<GraphicalObject*> graphical_objects;
-    UI ui;
+    void generate_random_stars();
 };
+
+class Terrain: public GraphicalLines {
+public:
+    Terrain();
+private:
+    void generate_random_terrain();
+};
+
+
