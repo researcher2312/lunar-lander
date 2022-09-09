@@ -13,15 +13,32 @@ abstract PhysicalObject{
     +apply_rotation()
     +move()
 }
-abstract GraphicalObject{
-    +{abstract}draw(SDL_Renderer*)
+interface GraphicalObject{
+    -color: SDL_Color
+    +set_color()
+    +get_color()
+    +{abstract} ~GraphicalObject()
 }
+abstract GraphicalPoints{
+    -points: vector<SDL_Point>
 
+}
+abstract GraphicalLines{
+    -lines: vector<SDL_Point>
+
+}
+abstract GraphicalGeometry{
+    -vertex: vector<SDL_Vertex>
+
+}
+abstract GraphicalText{
+    #text:string
+    #font:font_type
+    +set_text(string, font_type)
+    -ui_texture: SDL_Texture*
+}
 class BackgroundImage{
-    +BacgroundImage()
-    +~BackgrounImage()
     -generate_random_stars()
-    -stars: array
 }
 class Game{
     +Game()
@@ -36,9 +53,6 @@ class Lander{
     +explode()
 }
 class Terrain{
-    -hills: array
-    +Terrain()
-    +Terrain()
     -generate_hills()
 }
 class GameWindow{
@@ -49,6 +63,7 @@ class GameWindow{
     -renderer
     +update_graphics()
     +add_new_graphical_object()
+    -render()
 }
 class Player{
     +points
@@ -71,32 +86,31 @@ class UI{
 abstract UIElement{
     -position: SDL_Point
     -size: SDL_Point
-    +update_values()
-    +display_ui()
-    +display_message()
 }
 class UITextElement{
-    -text:string
-    -font:font_type
-    +set_text()
+
 }
 class UIGraphicalElement{
 
 }
 
 PhysicalObject <|.. Lander
-GraphicalObject <|-- PhysicalObject
-GraphicalObject <|.. Terrain
+GraphicalObject <|-- GraphicalGeometry
+GraphicalPoints <|-- GraphicalLines
+GraphicalObject <|-- GraphicalPoints
+GraphicalObject <|-- GraphicalText
+GraphicalLines <|.. Terrain
 Game *-- GameWindow
+GraphicalGeometry <|.. Lander
 Player *-- Lander
 Game *-- Physics
 Game *-- Player
 Game *-- Terrain
-GraphicalObject <|.. LandingZone
+GraphicalText <|.. LandingZone
 Terrain *- "1.*"LandingZone
 UI *-- "1.*" UIElement
-GraphicalObject <|.. UIElement
 Game *-- UI
-GraphicalObject <|.. BackgroundImage
+GraphicalText <|.. UITextElement
+GraphicalPoints <|.. BackgroundImage
 UIElement <|.right. UITextElement
 UIElement <|.left. UIGraphicalElement

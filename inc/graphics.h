@@ -1,32 +1,52 @@
 #pragma once
 
-#include <SDL.h>
-#include <array>
+#include <vector>
 #include <string>
+#include <SDL.h>
+#include <SDL_ttf.h>
 
-constexpr int STAR_COUNT = 80;
-constexpr int HILLS_COUNT = 200;
+enum font_type{
+    TITLE_FONT,
+    UI_FONT,
+    FONT_NUM
+};
+
+namespace color
+{
+    constexpr SDL_Color white {255,255,255};
+    constexpr SDL_Color black {0,0,0};
+    constexpr SDL_Color red {255,0,0};
+    constexpr SDL_Color green {0,255,0};
+    constexpr SDL_Color blue {0,0,255};
+}
 
 class GraphicalObject {
 public:
-    virtual void draw(SDL_Renderer*) = 0;
+    virtual ~GraphicalObject() = 0;
+    void setColor(SDL_Color color){m_color=color;};
+    SDL_Color getColor() const{return m_color;};
+private:
+    SDL_Color m_color;
+};
+
+class GraphicalPoints: public virtual GraphicalObject {
+public:
+    auto get_points() const{return points.data();};
+protected:
+    std::vector<SDL_Point> points;
+};
+
+class GraphicalLines: public virtual GraphicalPoints {
+public:
 private:
 };
 
-class BackgroundImage: public GraphicalObject {
+class GraphicalText: public virtual GraphicalObject {
 public:
-    BackgroundImage();
-    void draw(SDL_Renderer*) final;
-private:
-    void generate_random_stars();
-    std::array<SDL_Point, STAR_COUNT> stars;
-};
-
-class Terrain: public GraphicalObject {
-public:
-    Terrain();
-    void draw(SDL_Renderer*) final;
-private:
-    void generate_random_terrain();
-    std::array<SDL_Point, HILLS_COUNT> hills;
+    void set_text(std::string, font_type);
+protected:
+    // void render_text(TTF_Font* font, SDL_Renderer* renderer);
+    std::string text;
+    font_type font;
+    SDL_Texture* ui_texture;
 };
