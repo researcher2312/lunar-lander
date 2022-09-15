@@ -37,6 +37,7 @@ void Terrain::generate_random_terrain()
 
 Terrain::Terrain()
 {
+    setColor(color::white);
     points = std::vector<SDL_Point>(HILLS_COUNT);
     generate_random_terrain();
 }
