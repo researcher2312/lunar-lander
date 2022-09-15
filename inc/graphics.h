@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <array>
+#include <unordered_map>
 #include <SDL.h>
 #include <SDL_ttf.h>
 
@@ -45,20 +46,24 @@ public:
     void invoke_renderer(Renderer&) override;
     auto get_points() const{return points.data();};
     auto get_size() const{return points.size();};
-
 protected:
     std::vector<SDL_Point> points;
 };
 
 class GraphicalText: public virtual GraphicalObject {
 public:
-    void set_text(std::string, font_type);
+    SDL_Rect get_quad() const {return m_rect;};
+    void set_position(SDL_Point);
+    void set_size(SDL_Point);
     void invoke_renderer(Renderer&) override;
+    void set_text(std::string, font_type);
+    auto get_text() const {return m_text.c_str();};
+    font_type get_font() const {return m_font;};
 protected:
-    bool modified;
-    std::string text;
-    font_type font;
-    SDL_Texture* text_texture;
+    SDL_Rect m_rect;
+    bool m_modified;
+    std::string m_text;
+    font_type m_font;
 };
 
 class Renderer {
@@ -70,8 +75,10 @@ public:
     void show_screen() const {SDL_RenderPresent(renderer);};
     void render_line(const GraphicalLines*);
     void render_points(const GraphicalPoints*);
-    // void render_text(const GraphicalText*);
+    void render_text(const GraphicalText*);
+    void render_texture_from_text(GraphicalText*);
 private:
     SDL_Renderer* renderer;
     std::array<TTF_Font*, FONT_NUM> fonts;
+    std::unordered_map<const GraphicalText*, SDL_Texture*> textures_for_text_rendering; 
 };

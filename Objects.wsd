@@ -38,11 +38,17 @@ class GraphicalGeometry{
     #vertex: vector<SDL_Vertex>
 }
 class GraphicalText{
+    #m_rect: SDL_Rect
+    #m_modified: bool
+    #text: string
+    #font: font_type
+    +get_quad()
+    +set_position()
+    +set_size()
     +invoke_renderer(Renderer&)
-    #text:string
-    #font:font_type
     +set_text(string, font_type)
-    #ui_texture: SDL_Texture*
+    +get_text()
+    +get_font
 }
 class BackgroundImage{
     +BackgrounImage();
@@ -80,12 +86,13 @@ class Renderer{
     +set_drawing_color(SDL_Color)
     +clear_screen()
     +show_screem()
-    -renderpoints(GraphicalPoints*)
-    -renderline(GraphicalLines*)
-    -rendergeometry(GraphicalGeometry*)
-    -rendertext(GraphicalText*)
+    +render_points(GraphicalPoints*)
+    +render_line(GraphicalLines*)
+    +render_geometry(GraphicalGeometry*)
+    +render_text(GraphicalText*)
     -renderer: SDL_Renderer*
     -fonts: array
+    -textures_for_text_rendering: unordered_map
 }
 class Player{
     +points
@@ -111,30 +118,30 @@ abstract UIElement{
     -size: SDL_Point
 }
 class UITextElement{
+    invoke_renderer(Renderer&)
 
 }
 class UIGraphicalElement{
 
 }
 
-PhysicalObject <|.. Lander
-GraphicalObject <|-- GraphicalGeometry
-GraphicalObject <|-- GraphicalLines
-GraphicalObject <|-- GraphicalPoints
+PhysicalObject <|-- Lander
+GraphicalObject <|.. GraphicalGeometry
+GraphicalObject <|.. GraphicalLines
+GraphicalObject <|.. GraphicalPoints
 GraphicalObject <|-- GraphicalText
-GraphicalLines <|.. Terrain
+GraphicalLines <|-- Terrain
 Game *-- GameWindow
-GraphicalGeometry <|.. Lander
+GraphicalGeometry <|-- Lander
 Player *-- Lander
 Game *-- Physics
 Game *-- Player
 Game *-- Terrain
-GraphicalText <|.. LandingZone
 Terrain *- "1.*"LandingZone
 UI *-- "1.*" UIElement
 Game *-- UI
 GraphicalText <|.. UITextElement
-GraphicalPoints <|.. BackgroundImage
+GraphicalPoints <|-- BackgroundImage
 UIElement <|.right. UITextElement
 UIElement <|.left. UIGraphicalElement
 GameWindow *-- Renderer

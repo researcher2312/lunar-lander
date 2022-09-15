@@ -15,37 +15,33 @@ void GraphicalLines::invoke_renderer(Renderer& renderer)
     renderer.render_line(this);
 }
 
-// void GraphicalText::invoke_renderer(Renderer& renderer)
-// {
-//     if (modified) {
-//         // render_texture();
-//     }
-// }
+void GraphicalText::invoke_renderer(Renderer& renderer)
+{
+    if (m_modified) {
+        renderer.render_texture_from_text(this);
+        m_modified = 0;
+    }
+    renderer.render_text(this);
+}
 
 void GraphicalText::set_text(std::string text_, font_type font_)
 {
-    text = text_;
-    font = font_;
+    m_text = text_;
+    m_font = font_;
+    m_modified = true;
 }
 
-// void GraphicalText::render_texture(TTF_Font* font, SDL_Renderer* renderer)
-// {
-//     SDL_Surface* textSurface = TTF_RenderText_Solid(font,text.c_str(),color::white);
-//     if (textSurface == NULL) {
-//         printf("Unable to render text surface! SDL_ttf Error: %s\n",TTF_GetError());
-//     }
-//     else {
-//         //Create texture from surface pixels
-//         ui_texture = SDL_CreateTextureFromSurface(renderer,textSurface);
-//         if (ui_texture == NULL){
-//             printf("Unable to create texture from rendered text! SDL Error: %s\n",SDL_GetError());
-//         }
-//     }
-//     size.x = textSurface->w;
-//     size.y = textSurface->h;
-//     SDL_FreeSurface(textSurface);
-// }
+void GraphicalText::set_position(SDL_Point position)
+{
+    m_rect.x = position.x;
+    m_rect.y = position.y;
+}
 
+void GraphicalText::set_size(SDL_Point position)
+{
+    m_rect.w = position.x;
+    m_rect.h = position.y;
+}
 
 Renderer::Renderer(SDL_Window* window)
 {
@@ -58,8 +54,8 @@ Renderer::Renderer(SDL_Window* window)
 
 Renderer::~Renderer()
 {
-    SDL_DestroyRenderer(renderer);
     std::for_each(fonts.begin(), fonts.end(), TTF_CloseFont);
+    SDL_DestroyRenderer(renderer);
 }
 
 void Renderer::set_drawing_color(const SDL_Color& color)
@@ -81,8 +77,28 @@ void Renderer::render_line(const GraphicalLines* rendered)
     SDL_RenderDrawLines(renderer,rendered->get_points(),rendered->get_size());
 }
 
-// void Renderer::render_text(const GraphicalText* rendered)
-// {
-//     SDL_RenderCopy(renderer,text_texture,NULL,&render_quad);
-// }
+void Renderer::render_text(const GraphicalText* rendered)
+{
+    SDL_Rect destination_rect = rendered->get_quad();
+    SDL_RenderCopy(renderer,textures_for_text_rendering[rendered],NULL, &destination_rect);
+}
 
+void Renderer::render_texture_from_text(GraphicalText* graphical_text)
+{
+    SDL_Surface* textSurface = TTF_RenderText_Solid(fonts[graphical_text->get_font()],graphical_text->get_text(),graphical_text->getColor());
+    if (textSurface == NULL) {
+        printf("Unable to render text surface! SDL_ttf Error: %s\n",TTF_GetError());
+    }
+    else {
+        //Create texture from surface pixels
+        textures_for_text_rendering[graphical_text] = SDL_CreateTextureFromSurface(renderer,textSurface);
+        if (textures_for_text_rendering[graphical_text] == NULL){
+            printf("Unable to create texture from rendered text! SDL Error: %s\n",SDL_GetError());
+        }
+    }
+    SDL_Point size;
+    size.x = textSurface->w;
+    size.y = textSurface->h;
+    graphical_text->set_size(size);
+    SDL_FreeSurface(textSurface);
+}

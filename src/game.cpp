@@ -58,9 +58,10 @@ Game::Game()
 {
     window.add_new_graphical_object(&background);
     window.add_new_graphical_object(&terrain);
-    // auto title = new UITextElement();
-    // title->set_text("Lunar Lander",TITLE_FONT);
-    // ui.add_ui_element(title);
+    auto title = new GraphicalText;
+    title->set_text("Lunar Lander",TITLE_FONT);
+    title->setColor(color::white);
+    window.add_new_graphical_object(title);
 }
 
 Game::~Game()
