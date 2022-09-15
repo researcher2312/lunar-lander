@@ -1,9 +1,26 @@
+#include <algorithm>
+#include <iostream>
 #include "graphics.h"
 
 constexpr int SCREEN_WIDTH = 640;
 constexpr int SCREEN_HEIGHT = 480;
 
-GraphicalObject::~GraphicalObject(){}
+void GraphicalPoints::invoke_renderer(Renderer& renderer)
+{
+    renderer.render_points(this);
+}
+
+void GraphicalLines::invoke_renderer(Renderer& renderer)
+{
+    renderer.render_line(this);
+}
+
+// void GraphicalText::invoke_renderer(Renderer& renderer)
+// {
+//     if (modified) {
+//         // render_texture();
+//     }
+// }
 
 void GraphicalText::set_text(std::string text_, font_type font_)
 {

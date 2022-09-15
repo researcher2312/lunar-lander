@@ -15,21 +15,15 @@ GameWindow::GameWindow()
     if (TTF_Init()<0) {
         std::cerr<<"SDL_ttf could not initialize! SDL_ttf Error: %s\n"<<TTF_GetError();
     }
-    fonts[TITLE_FONT] = TTF_OpenFont("../resources/oscilloscope.ttf",35);
-    fonts[UI_FONT] = TTF_OpenFont("../resources/oscilloscope.ttf",15);
     //Create window
     window = SDL_CreateWindow("Lunar Lander",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH,SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
     if (window == NULL) {
     }
     else {
-        renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
-        if (renderer == NULL) {
-        }
+        m_renderer = std::make_unique<Renderer>(window);
         SDL_Surface* icon = SDL_LoadBMP("../resources/icon.bmp");
         SDL_SetWindowIcon(window, icon);
         SDL_FreeSurface(icon);
-        set_drawing_color(color::black);
-        SDL_RenderClear(renderer);
     }
     std::cerr<<"Finished init\n";
 }
@@ -37,9 +31,7 @@ GameWindow::GameWindow()
 GameWindow::~GameWindow()
 {
     std::cerr<<"GameWindow destroyed\n";
-    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    std::for_each(fonts.begin(), fonts.end(), TTF_CloseFont);
     TTF_Quit();
     SDL_Quit();
 }
@@ -47,52 +39,20 @@ GameWindow::~GameWindow()
 void GameWindow::update_graphics()
 {
     //Clear screen
-    set_drawing_color(color::black);
-    SDL_RenderClear(renderer);
+    m_renderer->set_drawing_color(color::black);
+    m_renderer->clear_screen();
     //draw all objects
-    for (auto rendered_object: graphical_objects) {
-        render(rendered_object);
+    for (auto rendered_object: m_graphical_objects) {
+        rendered_object->invoke_renderer(*m_renderer);
     }
     //Update screen
-    SDL_RenderPresent(renderer);
+    m_renderer->show_screen();
 }
 
 void GameWindow::add_new_graphical_object(GraphicalObject* new_object)
 {
-    graphical_objects.push_back(new_object);
+    m_graphical_objects.push_back(new_object);
 }
-
-void GameWindow::set_drawing_color(const SDL_Color& color)
-{
-    SDL_SetRenderDrawColor(renderer,color.r,color.g,color.b,color.a);
-
-}
-
-void GameWindow::render(GraphicalObject*)
-{
-    std::cerr << "GraphicalObject\n";
-}
-
-
-void GameWindow::render(GraphicalPoints* rendered)
-{
-    set_drawing_color(rendered->getColor());
-    SDL_RenderDrawPoints(renderer,rendered->get_points(),0);
-}
-
-
-void GameWindow::render(GraphicalLines* rendered)
-{
-    set_drawing_color(rendered->getColor());
-    SDL_RenderDrawLines(renderer,rendered->get_points(),0);
-}
-
-// void GameWindow::render(GraphicalText* rendered)
-// {
-
-//     //Render to screen
-//     SDL_RenderCopy(renderer,ui_texture,NULL,&render_quad);
-// }
 
 Game::Game()
 {

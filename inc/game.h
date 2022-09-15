@@ -18,17 +18,11 @@ public:
     ~GameWindow();
     void update_graphics();
     void add_new_graphical_object(GraphicalObject*);
-    SDL_Renderer* get_renderer() {return renderer;};
+    // SDL_Renderer* get_renderer() {return renderer;};
 private:
     SDL_Window* window;
-    SDL_Renderer* renderer;
-    std::list<GraphicalObject*> graphical_objects;
-    std::array<TTF_Font*, FONT_NUM> fonts;
-    void set_drawing_color(const SDL_Color&);
-    void render(GraphicalObject*);
-    void render(GraphicalLines*);
-    void render(GraphicalPoints*);
-    void render(GraphicalText*);
+    std::list<GraphicalObject*> m_graphical_objects;
+    std::unique_ptr<Renderer> m_renderer;
 };
 
 class Game {

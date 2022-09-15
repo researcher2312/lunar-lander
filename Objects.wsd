@@ -1,6 +1,6 @@
 @startuml lunar-lander
 title lunar-lander
-abstract PhysicalObject{
+class PhysicalObject{
     #weight
     #position
     #rotation
@@ -17,27 +17,35 @@ interface GraphicalObject{
     -color: SDL_Color
     +set_color()
     +get_color()
-    +{abstract} ~GraphicalObject()
+    +{abstract} invoke_render(Renderer&)
 }
-abstract GraphicalPoints{
-    -points: vector<SDL_Point>
+class GraphicalPoints{
+    +invoke_renderer(Renderer&)
+    +get_points() const: SDL_Point*
+    +get_size(): int
+    #points: vector<SDL_Point>
 
 }
-abstract GraphicalLines{
-    -lines: vector<SDL_Point>
+class GraphicalLines{
+    +invoke_renderer(Renderer&)
+    +get_points() const: SDL_Point*
+    +get_size(): int
+    #lines: vector<SDL_Point>
 
 }
-abstract GraphicalGeometry{
-    -vertex: vector<SDL_Vertex>
-
+class GraphicalGeometry{
+    +invoke_renderer(Renderer&)
+    #vertex: vector<SDL_Vertex>
 }
-abstract GraphicalText{
+class GraphicalText{
+    +invoke_renderer(Renderer&)
     #text:string
     #font:font_type
     +set_text(string, font_type)
-    -ui_texture: SDL_Texture*
+    #ui_texture: SDL_Texture*
 }
 class BackgroundImage{
+    +BackgrounImage();
     -generate_random_stars()
 }
 class Game{
@@ -53,17 +61,31 @@ class Lander{
     +explode()
 }
 class Terrain{
+    +Terrain()
     -generate_hills()
 }
 class GameWindow{
     +GameWindow()
     +~GameWindow()
     -graphical_objects: list
-    -window
-    -renderer
+    -SDL_Window
+    -renderer: unique_ptr<Renderer>
     +update_graphics()
     +add_new_graphical_object()
-    -render()
+    
+}
+class Renderer{
+    +Renderer(SDL_Window*)
+    +~Renderer()
+    +set_drawing_color(SDL_Color)
+    +clear_screen()
+    +show_screem()
+    -renderpoints(GraphicalPoints*)
+    -renderline(GraphicalLines*)
+    -rendergeometry(GraphicalGeometry*)
+    -rendertext(GraphicalText*)
+    -renderer: SDL_Renderer*
+    -fonts: array
 }
 class Player{
     +points
@@ -80,6 +102,7 @@ class LandingZone{
     +get_points()
 }
 class UI{
+    +get_quad(): SDL_Rect
     -ui_elements: list
     -fonts: array
 }
@@ -96,7 +119,7 @@ class UIGraphicalElement{
 
 PhysicalObject <|.. Lander
 GraphicalObject <|-- GraphicalGeometry
-GraphicalPoints <|-- GraphicalLines
+GraphicalObject <|-- GraphicalLines
 GraphicalObject <|-- GraphicalPoints
 GraphicalObject <|-- GraphicalText
 GraphicalLines <|.. Terrain
@@ -114,3 +137,4 @@ GraphicalText <|.. UITextElement
 GraphicalPoints <|.. BackgroundImage
 UIElement <|.right. UITextElement
 UIElement <|.left. UIGraphicalElement
+GameWindow *-- Renderer
