@@ -30,10 +30,11 @@ GameWindow::GameWindow()
 
 GameWindow::~GameWindow()
 {
-    std::cerr<<"GameWindow destroyed\n";
+    m_renderer.reset();
     SDL_DestroyWindow(window);
     TTF_Quit();
     SDL_Quit();
+    std::cerr<<"GameWindow destroyed\n";
 }
 
 void GameWindow::update_graphics()

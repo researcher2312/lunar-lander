@@ -56,6 +56,7 @@ Renderer::~Renderer()
 {
     std::for_each(fonts.begin(), fonts.end(), TTF_CloseFont);
     SDL_DestroyRenderer(renderer);
+    std::cerr<<"Renderer destroyed\n";
 }
 
 void Renderer::set_drawing_color(const SDL_Color& color)
