@@ -1,59 +1,43 @@
+#include <random>
 #include "game_objects.h"
+#include "game.h"
 
-constexpr int SCREEN_WIDTH = 640;
-constexpr int SCREEN_HEIGHT = 480;
-
-GameWindow::GameWindow()
+void BackgroundImage::generate_random_stars()
 {
-    if (SDL_Init(SDL_INIT_VIDEO)<0) {
-        printf( "SDL could not initialize! SDL_Error: %s\n",SDL_GetError());
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> distwidth(1,SCREEN_WIDTH);
+    std::uniform_int_distribution<std::mt19937::result_type> distheight(1,SCREEN_HEIGHT);
+    for (int i=0; i<STAR_COUNT; ++i) {
+        points[i] = SDL_Point{int(distwidth(rng)), int(distheight(rng))};
     }
-    if (TTF_Init()<0) {
-        printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
-    }
-    //Create window
-    window = SDL_CreateWindow("Lunar Lander",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH,SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
-    if (window == NULL) {
-        printf("Window could not be created! SDL_Error: %s\n",SDL_GetError());
-    }
-    else {
-        renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
-        if (renderer == NULL) {
-            printf("Renderer could not be created! SDL Error: %s\n",SDL_GetError());
+}
+
+BackgroundImage::BackgroundImage()
+{
+    setColor(color::white);
+    points = std::vector<SDL_Point>(STAR_COUNT);
+    generate_random_stars();
+}
+
+void Terrain::generate_random_terrain()
+{
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> distheight(0,SCREEN_HEIGHT/10);
+    int height = 0;
+    for (int i=0; i<HILLS_COUNT; ++i) {
+        height += int(distheight(rng)) - SCREEN_HEIGHT/20;
+        if (height < 0) {
+            height -= height;
         }
-        SDL_Surface* icon = SDL_LoadBMP("../resources/icon.bmp");
-        SDL_SetWindowIcon(window, icon);
-        SDL_FreeSurface(icon);
-        SDL_SetRenderDrawColor(renderer,0x00,0x00,0x00,0xFF);
-        SDL_RenderClear(renderer);
+        points[i] = SDL_Point{SCREEN_WIDTH/HILLS_COUNT*i,SCREEN_HEIGHT-height};
     }
 }
 
-GameWindow::~GameWindow()
+Terrain::Terrain()
 {
-    printf("GameWindow destroyed\n");
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    TTF_Quit();
-    SDL_Quit();
-}
-
-void GameWindow::update_graphics()
-{
-    //Clear screen
-    SDL_SetRenderDrawColor(renderer,0x00,0x00,0x00,0xFF);
-    SDL_RenderClear(renderer);
-
-    //draw all objects
-    for (auto rendered_object: graphical_objects) {
-        rendered_object->draw(renderer);
-    }
-
-    //Update screen
-    SDL_RenderPresent(renderer);
-}
-
-void GameWindow::add_new_graphical_object(GraphicalObject* new_object)
-{
-    graphical_objects.push_back(new_object);
+    setColor(color::white);
+    points = std::vector<SDL_Point>(HILLS_COUNT);
+    generate_random_terrain();
 }

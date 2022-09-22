@@ -1,6 +1,6 @@
 @startuml lunar-lander
 title lunar-lander
-abstract PhysicalObject{
+class PhysicalObject{
     #weight
     #position
     #rotation
@@ -13,15 +13,46 @@ abstract PhysicalObject{
     +apply_rotation()
     +move()
 }
-abstract GraphicalObject{
-    +{abstract}draw(SDL_Renderer*)
+interface GraphicalObject{
+    -color: SDL_Color
+    +set_color()
+    +get_color()
+    +{abstract} invoke_render(Renderer&)
 }
+class GraphicalPoints{
+    +invoke_renderer(Renderer&)
+    +get_points() const: SDL_Point*
+    +get_size(): int
+    #points: vector<SDL_Point>
 
+}
+class GraphicalLines{
+    +invoke_renderer(Renderer&)
+    +get_points() const: SDL_Point*
+    +get_size(): int
+    #lines: vector<SDL_Point>
+
+}
+class GraphicalGeometry{
+    +invoke_renderer(Renderer&)
+    #vertex: vector<SDL_Vertex>
+}
+class GraphicalText{
+    #m_rect: SDL_Rect
+    #m_modified: bool
+    #text: string
+    #font: font_type
+    +get_quad()
+    +set_position()
+    +set_size()
+    +invoke_renderer(Renderer&)
+    +set_text(string, font_type)
+    +get_text()
+    +get_font
+}
 class BackgroundImage{
-    +BacgroundImage()
-    +~BackgrounImage()
+    +BackgrounImage();
     -generate_random_stars()
-    -stars: array
 }
 class Game{
     +Game()
@@ -36,8 +67,6 @@ class Lander{
     +explode()
 }
 class Terrain{
-    -hills: array
-    +Terrain()
     +Terrain()
     -generate_hills()
 }
@@ -45,10 +74,25 @@ class GameWindow{
     +GameWindow()
     +~GameWindow()
     -graphical_objects: list
-    -window
-    -renderer
+    -SDL_Window
+    -renderer: unique_ptr<Renderer>
     +update_graphics()
     +add_new_graphical_object()
+    
+}
+class Renderer{
+    +Renderer(SDL_Window*)
+    +~Renderer()
+    +set_drawing_color(SDL_Color)
+    +clear_screen()
+    +show_screem()
+    +render_points(GraphicalPoints*)
+    +render_line(GraphicalLines*)
+    +render_geometry(GraphicalGeometry*)
+    +render_text(GraphicalText*)
+    -renderer: SDL_Renderer*
+    -fonts: array
+    -textures_for_text_rendering: unordered_map
 }
 class Player{
     +points
@@ -65,38 +109,39 @@ class LandingZone{
     +get_points()
 }
 class UI{
+    +get_quad(): SDL_Rect
     -ui_elements: list
     -fonts: array
 }
 abstract UIElement{
     -position: SDL_Point
     -size: SDL_Point
-    +update_values()
-    +display_ui()
-    +display_message()
 }
 class UITextElement{
-    -text:string
-    -font:font_type
-    +set_text()
+    invoke_renderer(Renderer&)
+
 }
 class UIGraphicalElement{
 
 }
 
-PhysicalObject <|.. Lander
-GraphicalObject <|-- PhysicalObject
-GraphicalObject <|.. Terrain
+PhysicalObject <|-- Lander
+GraphicalObject <|.. GraphicalGeometry
+GraphicalObject <|.. GraphicalLines
+GraphicalObject <|.. GraphicalPoints
+GraphicalObject <|-- GraphicalText
+GraphicalLines <|-- Terrain
 Game *-- GameWindow
+GraphicalGeometry <|-- Lander
 Player *-- Lander
 Game *-- Physics
 Game *-- Player
 Game *-- Terrain
-GraphicalObject <|.. LandingZone
 Terrain *- "1.*"LandingZone
 UI *-- "1.*" UIElement
-GraphicalObject <|.. UIElement
 Game *-- UI
-GraphicalObject <|.. BackgroundImage
+GraphicalText <|.. UITextElement
+GraphicalPoints <|-- BackgroundImage
 UIElement <|.right. UITextElement
 UIElement <|.left. UIGraphicalElement
+GameWindow *-- Renderer
