@@ -1,0 +1,45 @@
+#include <list>
+#include <SDL.h>
+
+class Timer{
+public:
+    LTimer();
+    void start();
+    void stop();
+    Uint32 getTicks();
+    bool isStarted() const {return m_started;};
+private:
+    Uint32 m_start_ticks;
+    bool m_started;
+};
+
+//use basic SI units
+class PhysicalObject {
+public:
+    void set_position(SDL_Point);
+    void set_speed(SDL_Point);
+    void move(SDL_Point);
+    void set_rotation(int);
+    void set_rotation_speed(int);
+    void rotate(int);
+    void apply_force(SDL_Point, SDL_Point);
+protected:
+    bool gravity_enabled;
+    int m_weight;
+    int m_inertia;
+    int m_rotation;
+    int m_rotation_speed;
+    SDL_Point m_position;
+    SDL_Point m_speed;
+    SDL_Point m_overall_force;
+};
+
+class Physics {
+public:
+    void tick(int);
+private:
+    void update_physics();
+    void check_collisions();
+    std::list<PhysicalObject*> m_physical_objects;
+
+};

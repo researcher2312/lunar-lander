@@ -1,6 +1,7 @@
 #pragma once
 
 #include "graphics.h"
+#include "physics.h"
 
 constexpr int STAR_COUNT = 80;
 constexpr int HILLS_COUNT = 200;
