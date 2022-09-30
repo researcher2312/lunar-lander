@@ -66,6 +66,15 @@ protected:
     font_type m_font;
 };
 
+class GraphicalGeometry: public virtual GraphicalObject {
+public:
+    void invoke_renderer(Renderer&) override final;
+    auto get_vertex() const{return vertex.data();};
+    auto get_size() const{return vertex.size();};
+protected:
+    std::vector<SDL_Vertex> vertex;
+}
+
 class Renderer {
 public:
     Renderer(SDL_Window*);
@@ -77,6 +86,7 @@ public:
     void render_points(const GraphicalPoints*);
     void render_text(const GraphicalText*);
     void render_texture_from_text(GraphicalText*);
+    void render_geometry(GraphicalGeometry*);
 private:
     SDL_Renderer* renderer;
     std::array<TTF_Font*, FONT_NUM> fonts;

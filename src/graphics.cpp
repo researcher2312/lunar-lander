@@ -43,6 +43,11 @@ void GraphicalText::set_size(SDL_Point position)
     m_rect.h = position.y;
 }
 
+void GraphicalGeometry::invoke_renderer(Renderer& renderer)
+{
+    renderer.render_geometry(this);
+}
+
 Renderer::Renderer(SDL_Window* window)
 {
     fonts[TITLE_FONT] = TTF_OpenFont("../resources/oscilloscope.ttf",35);
