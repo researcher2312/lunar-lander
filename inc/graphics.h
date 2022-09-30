@@ -34,7 +34,7 @@ private:
 
 class GraphicalPoints: public virtual GraphicalObject {
 public:
-    void invoke_renderer(Renderer&) override;
+    void invoke_renderer(Renderer&) override final;
     auto get_points() const{return points.data();};
     auto get_size() const{return points.size();};
 protected:
@@ -43,7 +43,7 @@ protected:
 
 class GraphicalLines: public virtual GraphicalObject {
 public:
-    void invoke_renderer(Renderer&) override;
+    void invoke_renderer(Renderer&) override final;
     auto get_points() const{return points.data();};
     auto get_size() const{return points.size();};
 protected:
@@ -55,7 +55,7 @@ public:
     SDL_Rect get_quad() const {return m_rect;};
     void set_position(SDL_Point);
     void set_size(SDL_Point);
-    void invoke_renderer(Renderer&) override;
+    void invoke_renderer(Renderer&) override final;
     void set_text(std::string, font_type);
     auto get_text() const {return m_text.c_str();};
     font_type get_font() const {return m_font;};
