@@ -19,18 +19,18 @@ public:
     void set_position(SDL_Point);
     void set_speed(SDL_Point);
     void move(SDL_Point);
+    void rotate(int);
     void set_rotation(int);
     void set_rotation_speed(int);
-    void rotate(int);
     void apply_force(SDL_Point, SDL_Point);
 protected:
     bool gravity_enabled;
     int m_weight;
-    int m_inertia;
-    int m_rotation;
-    int m_rotation_speed;
+    int m_rotation_inertia;
     SDL_Point m_position;
+    int m_rotation;
     SDL_Point m_speed;
+    int m_rotation_speed;
     SDL_Point m_overall_force;
 };
 
