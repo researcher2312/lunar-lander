@@ -1,17 +1,28 @@
 @startuml lunar-lander
+skinparam groupInheritance 3
 title lunar-lander
-class PhysicalObject{
-    #weight
-    #position
-    #rotation
-    #speed
-    #momentum
+Interface PhysicalObject{
+    #m_collisions_enabled: bool
+}
+class RigidBody{
+    #m_gravity_enabled: bool
+    #m_weight: int
+    #m_rotation_inertia: int
+    #m_position: SDL_Point
+    #m_rotation: int
+    #m_speed: SDL_Point
+    #m_rotation_speed: int
+    #m_overall_force: SDL_Point
     +set_position()
     +set_speed()
-    +set_momentum()
-    +apply_force()
-    +apply_rotation()
     +move()
+    +rotate()
+    +set_rotation()
+    +set_rotation_speed()
+    +apply_force()
+}
+class StaticObject{
+
 }
 interface GraphicalObject{
     -color: SDL_Color
@@ -50,10 +61,18 @@ class GraphicalText{
     +get_text()
     +get_font
 }
-class BackgroundImage{
-    +BackgrounImage();
-    -generate_random_stars()
+class GraphicalBitmap{
+
 }
+interface GameObject{
+    #m_position: SDL_Point
+    #m_graphics: GraphicalObject*
+    #m_physics: PhysicalObject*
+    +draw(SDL_Renderer*)
+    +get_position()
+    +update()
+}
+
 class Game{
     +Game()
     +~Game()
@@ -62,14 +81,7 @@ class Game{
     +get_user_input()
     +update()
 }
-class Lander{
-    +fuel
-    +explode()
-}
-class Terrain{
-    +Terrain()
-    -generate_hills()
-}
+
 class GameWindow{
     +GameWindow()
     +~GameWindow()
@@ -94,6 +106,7 @@ class Renderer{
     -fonts: array
     -textures_for_text_rendering: unordered_map
 }
+
 class Player{
     +points
     +add_points()
@@ -104,44 +117,67 @@ class Physics{
     +update_physics()
     -check_collisions()
 }
+together {
+together {
 class LandingZone{
     +award
     +get_points()
 }
-class UI{
-    +get_quad(): SDL_Rect
-    -ui_elements: list
-    -fonts: array
+class Terrain{
+    +Terrain()
+    -generate_hills()
 }
-abstract UIElement{
-    -position: SDL_Point
-    -size: SDL_Point
 }
-class UITextElement{
-    invoke_renderer(Renderer&)
-
+class BackgroundImage{
+    +BackgrounImage();
+    -generate_random_stars()
 }
-class UIGraphicalElement{
-
+class Lander{
+    +fuel
+    +explode()
+}
 }
 
-PhysicalObject <|-- Lander
-GraphicalObject <|.. GraphicalGeometry
-GraphicalObject <|.. GraphicalLines
-GraphicalObject <|.. GraphicalPoints
-GraphicalObject <|-- GraphicalText
-GraphicalLines <|-- Terrain
-Game *-- GameWindow
-GraphicalGeometry <|-- Lander
-Player *-- Lander
+' class UI{
+'     +get_quad(): SDL_Rect
+'     -ui_elements: list
+'     -fonts: array
+' }
+' abstract UIElement{
+'     -position: SDL_Point
+'     -size: SDL_Point
+' }
+
 Game *-- Physics
 Game *-- Player
 Game *-- Terrain
-Terrain *- "1.*"LandingZone
-UI *-- "1.*" UIElement
-Game *-- UI
-GraphicalText <|.. UITextElement
-GraphicalPoints <|-- BackgroundImage
-UIElement <|.right. UITextElement
-UIElement <|.left. UIGraphicalElement
-GameWindow *-- Renderer
+Game *-- GameWindow
+' Game *-- UI
+GameWindow *-down- Renderer
+
+PhysicalObject <|-- RigidBody
+PhysicalObject <|-- StaticObject
+
+GraphicalObject <|.. GraphicalGeometry
+GraphicalObject <|.. GraphicalLines
+GraphicalObject <|.. GraphicalPoints
+GraphicalObject <|.. GraphicalText
+GraphicalObject <|.. GraphicalBitmap
+
+GameObject <|-- Terrain
+GameObject <|-- Lander
+GameObject <|-- LandingZone
+GameObject <|-- BackgroundImage
+' GraphicalText <|.. UITextElement
+
+Lander *-- GraphicalGeometry
+BackgroundImage *-- GraphicalPoints
+Terrain *-- GraphicalLines
+LandingZone *-- GraphicalText
+
+' UIElement <|.right. UITextElement
+' UIElement <|.left. UIGraphicalElement
+Lander  *-- RigidBody
+Player *-- Lander
+Terrain *-right- "1.*"LandingZone
+' UI *-- "1.*" UIElement
