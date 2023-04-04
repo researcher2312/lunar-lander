@@ -10,11 +10,6 @@ void GraphicalPoints::invoke_renderer(Renderer& renderer)
     renderer.render_points(this);
 }
 
-void GraphicalLines::invoke_renderer(Renderer& renderer)
-{
-    renderer.render_line(this);
-}
-
 void GraphicalText::invoke_renderer(Renderer& renderer)
 {
     if (m_modified) {
@@ -73,14 +68,12 @@ void Renderer::set_drawing_color(const SDL_Color& color)
 void Renderer::render_points(const GraphicalPoints* rendered)
 {
     set_drawing_color(rendered->getColor());
-    SDL_RenderDrawPoints(renderer,rendered->get_points(),rendered->get_size());
-}
-
-
-void Renderer::render_line(const GraphicalLines* rendered)
-{
-    set_drawing_color(rendered->getColor());
-    SDL_RenderDrawLines(renderer,rendered->get_points(),rendered->get_size());
+    if(rendered->points_are_connected) {
+        SDL_RenderDrawLines(renderer,rendered->get_points(),rendered->get_size());
+    }
+    else {
+        SDL_RenderDrawPoints(renderer,rendered->get_points(),rendered->get_size());
+    }
 }
 
 void Renderer::render_text(const GraphicalText* rendered)
@@ -89,22 +82,27 @@ void Renderer::render_text(const GraphicalText* rendered)
     SDL_RenderCopy(renderer,textures_for_text_rendering[rendered],NULL, &destination_rect);
 }
 
-void Renderer::render_texture_from_text(GraphicalText* graphical_text)
+void Renderer::render_texture_from_text(GraphicalText* rendered)
 {
-    SDL_Surface* textSurface = TTF_RenderText_Solid(fonts[graphical_text->get_font()],graphical_text->get_text(),graphical_text->getColor());
+    SDL_Surface* textSurface = TTF_RenderText_Solid(fonts[rendered->get_font()],rendered->get_text(),rendered->getColor());
     if (textSurface == NULL) {
         printf("Unable to render text surface! SDL_ttf Error: %s\n",TTF_GetError());
     }
     else {
         //Create texture from surface pixels
-        textures_for_text_rendering[graphical_text] = SDL_CreateTextureFromSurface(renderer,textSurface);
-        if (textures_for_text_rendering[graphical_text] == NULL){
+        textures_for_text_rendering[rendered] = SDL_CreateTextureFromSurface(renderer,textSurface);
+        if (textures_for_text_rendering[rendered] == NULL){
             printf("Unable to create texture from rendered text! SDL Error: %s\n",SDL_GetError());
         }
     }
     SDL_Point size;
     size.x = textSurface->w;
     size.y = textSurface->h;
-    graphical_text->set_size(size);
+    rendered->set_size(size);
     SDL_FreeSurface(textSurface);
+}
+
+void Renderer::render_geometry(GraphicalGeometry* rendered)
+{
+
 }

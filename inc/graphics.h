@@ -34,18 +34,11 @@ private:
 
 class GraphicalPoints: public virtual GraphicalObject {
 public:
+    GraphicalPoints(bool connected): points_are_connected(connected){};
     void invoke_renderer(Renderer&) override final;
     auto get_points() const{return points.data();};
     auto get_size() const{return points.size();};
-protected:
-    std::vector<SDL_Point> points;
-};
-
-class GraphicalLines: public virtual GraphicalObject {
-public:
-    void invoke_renderer(Renderer&) override final;
-    auto get_points() const{return points.data();};
-    auto get_size() const{return points.size();};
+    bool points_are_connected;
 protected:
     std::vector<SDL_Point> points;
 };
@@ -69,11 +62,11 @@ protected:
 class GraphicalGeometry: public virtual GraphicalObject {
 public:
     void invoke_renderer(Renderer&) override final;
-    auto get_vertex() const{return vertex.data();};
-    auto get_size() const{return vertex.size();};
+    // auto get_vertex() const{return vertex.data();};
+    // auto get_size() const{return vertex.size();};
 protected:
-    std::vector<SDL_Vertex> vertex;
-}
+    // std::vector<SDL_Point> vertex;
+};
 
 class Renderer {
 public:
@@ -82,7 +75,7 @@ public:
     void set_drawing_color(const SDL_Color&);
     void clear_screen() const {SDL_RenderClear(renderer);};
     void show_screen() const {SDL_RenderPresent(renderer);};
-    void render_line(const GraphicalLines*);
+    void render_lines(const GraphicalLines*);
     void render_points(const GraphicalPoints*);
     void render_text(const GraphicalText*);
     void render_texture_from_text(GraphicalText*);

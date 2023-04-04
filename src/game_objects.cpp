@@ -4,6 +4,7 @@
 
 void BackgroundImage::generate_random_stars()
 {
+    std::vector<SDL_Point> points(STAR_COUNT);
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> distwidth(1,SCREEN_WIDTH);
@@ -22,6 +23,7 @@ BackgroundImage::BackgroundImage()
 
 void Terrain::generate_random_terrain()
 {
+    std::vector<SDL_Point> points(HILLS_COUNT);
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> distheight(0,SCREEN_HEIGHT/10);

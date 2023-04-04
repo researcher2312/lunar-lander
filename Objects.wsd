@@ -31,22 +31,17 @@ interface GraphicalObject{
     +{abstract} invoke_render(Renderer&)
 }
 class GraphicalPoints{
+    +points_are_connected: bool
     +invoke_renderer(Renderer&)
     +get_points() const: SDL_Point*
     +get_size(): int
-    #points: vector<SDL_Point>
+    -points: vector<SDL_Point>
 
 }
-class GraphicalLines{
-    +invoke_renderer(Renderer&)
-    +get_points() const: SDL_Point*
-    +get_size(): int
-    #lines: vector<SDL_Point>
 
-}
 class GraphicalGeometry{
     +invoke_renderer(Renderer&)
-    #vertex: vector<SDL_Vertex>
+    #vertex: vector<SDL_Point>
 }
 class GraphicalText{
     #m_rect: SDL_Rect
@@ -92,6 +87,7 @@ class GameWindow{
     +add_new_graphical_object()
     
 }
+
 class Renderer{
     +Renderer(SDL_Window*)
     +~Renderer()
@@ -154,12 +150,12 @@ Game *-- Terrain
 Game *-- GameWindow
 ' Game *-- UI
 GameWindow *-down- Renderer
+GameWindow *-- InputHandler
 
 PhysicalObject <|-- RigidBody
 PhysicalObject <|-- StaticObject
 
 GraphicalObject <|.. GraphicalGeometry
-GraphicalObject <|.. GraphicalLines
 GraphicalObject <|.. GraphicalPoints
 GraphicalObject <|.. GraphicalText
 GraphicalObject <|.. GraphicalBitmap
@@ -172,7 +168,7 @@ GameObject <|-- BackgroundImage
 
 Lander *-- GraphicalGeometry
 BackgroundImage *-- GraphicalPoints
-Terrain *-- GraphicalLines
+Terrain *-- GraphicalPoints
 LandingZone *-- GraphicalText
 
 ' UIElement <|.right. UITextElement
