@@ -2,6 +2,11 @@
 #include "game_objects.h"
 #include "game.h"
 
+void GameObject::draw(SDL_Renderer& renderer)
+{
+    m_graphics->invoke_renderer(&renderer);
+}
+
 void BackgroundImage::generate_random_stars()
 {
     std::vector<SDL_Point> points(STAR_COUNT);
@@ -16,9 +21,14 @@ void BackgroundImage::generate_random_stars()
 
 BackgroundImage::BackgroundImage()
 {
-    setColor(color::white);
-    points = std::vector<SDL_Point>(STAR_COUNT);
+    m_graphics = new GraphicalPoints(false);
+    m_graphics->setColor(color::white);
     generate_random_stars();
+}
+
+BackgroundImage::~BackgroundImage()
+{
+    delete(m_graphics);
 }
 
 void Terrain::generate_random_terrain()
@@ -39,7 +49,12 @@ void Terrain::generate_random_terrain()
 
 Terrain::Terrain()
 {
-    setColor(color::white);
-    points = std::vector<SDL_Point>(HILLS_COUNT);
+    m_graphics = new GraphicalPoints(true);
+    m_graphics->setColor(color::white);
     generate_random_terrain();
+}
+
+Lander::Lander()
+{
+
 }

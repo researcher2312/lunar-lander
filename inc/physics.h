@@ -3,7 +3,7 @@
 
 class Timer{
 public:
-    LTimer();
+    Timer();
     void start();
     void stop();
     Uint32 getTicks();
