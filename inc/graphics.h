@@ -75,7 +75,6 @@ public:
     void set_drawing_color(const SDL_Color&);
     void clear_screen() const {SDL_RenderClear(renderer);};
     void show_screen() const {SDL_RenderPresent(renderer);};
-    void render_lines(const GraphicalLines*);
     void render_points(const GraphicalPoints*);
     void render_text(const GraphicalText*);
     void render_texture_from_text(GraphicalText*);

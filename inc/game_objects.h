@@ -8,7 +8,7 @@ constexpr int HILLS_COUNT = 200;
 
 class GameObject {
 public:
-    void draw(SDL_Renderer&);
+    void draw(Renderer&);
     SDL_Point get_position() const;
     void update();
 protected:

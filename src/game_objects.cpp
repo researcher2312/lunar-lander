@@ -2,9 +2,9 @@
 #include "game_objects.h"
 #include "game.h"
 
-void GameObject::draw(SDL_Renderer& renderer)
+void GameObject::draw(Renderer& renderer)
 {
-    m_graphics->invoke_renderer(&renderer);
+    m_graphics->invoke_renderer(renderer);
 }
 
 void BackgroundImage::generate_random_stars()
@@ -54,7 +54,17 @@ Terrain::Terrain()
     generate_random_terrain();
 }
 
+Terrain::~Terrain()
+{
+
+}
+
 Lander::Lander()
 {
 
+}
+
+Lander::~Lander()
+{
+    
 }

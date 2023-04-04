@@ -5,9 +5,9 @@
 #include <array>
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include "game_objects.h"
 #include "ui.h"
 #include "graphics.h"
+#include "game_objects.h"
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
@@ -17,11 +17,11 @@ public:
     GameWindow();
     ~GameWindow();
     void update_graphics();
-    void add_new_graphical_object(GraphicalObject*);
+    void add_new_graphical_object(GameObject*);
     // SDL_Renderer* get_renderer() {return renderer;};
 private:
     SDL_Window* window;
-    std::list<GraphicalObject*> m_graphical_objects;
+    std::list<GameObject*> m_graphical_objects;
     std::unique_ptr<Renderer> m_renderer;
 };
 

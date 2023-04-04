@@ -44,13 +44,13 @@ void GameWindow::update_graphics()
     m_renderer->clear_screen();
     //draw all objects
     for (auto rendered_object: m_graphical_objects) {
-        rendered_object->invoke_renderer(*m_renderer);
+        rendered_object->draw(*m_renderer);
     }
     //Update screen
     m_renderer->show_screen();
 }
 
-void GameWindow::add_new_graphical_object(GraphicalObject* new_object)
+void GameWindow::add_new_graphical_object(GameObject* new_object)
 {
     m_graphical_objects.push_back(new_object);
 }
@@ -59,10 +59,10 @@ Game::Game()
 {
     window.add_new_graphical_object(&background);
     window.add_new_graphical_object(&terrain);
-    auto title = new GraphicalText;
-    title->set_text("Lunar Lander",TITLE_FONT);
-    title->setColor(color::white);
-    window.add_new_graphical_object(title);
+    // auto title = new GraphicalText;
+    // title->set_text("Lunar Lander",TITLE_FONT);
+    // title->setColor(color::white);
+    // window.add_new_graphical_object(title);
 }
 
 Game::~Game()

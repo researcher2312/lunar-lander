@@ -80,7 +80,7 @@ class Game{
 class GameWindow{
     +GameWindow()
     +~GameWindow()
-    -graphical_objects: list
+    -graphical_objects: list<GameObjects>
     -SDL_Window
     -renderer: unique_ptr<Renderer>
     +update_graphics()
