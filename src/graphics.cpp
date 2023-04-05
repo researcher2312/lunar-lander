@@ -10,6 +10,11 @@ void GraphicalPoints::invoke_renderer(Renderer& renderer)
     renderer.render_points(this);
 }
 
+void GraphicalPoints::set_points(std::vector<SDL_Point>& new_points)
+{
+    points = std::move(new_points);
+}
+
 void GraphicalText::invoke_renderer(Renderer& renderer)
 {
     if (m_modified) {

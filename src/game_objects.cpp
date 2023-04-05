@@ -2,11 +2,6 @@
 #include "game_objects.h"
 #include "game.h"
 
-void GameObject::draw(Renderer& renderer)
-{
-    m_graphics->invoke_renderer(renderer);
-}
-
 void BackgroundImage::generate_random_stars()
 {
     std::vector<SDL_Point> points(STAR_COUNT);
@@ -15,20 +10,26 @@ void BackgroundImage::generate_random_stars()
     std::uniform_int_distribution<std::mt19937::result_type> distwidth(1,SCREEN_WIDTH);
     std::uniform_int_distribution<std::mt19937::result_type> distheight(1,SCREEN_HEIGHT);
     for (int i=0; i<STAR_COUNT; ++i) {
-        points[i] = SDL_Point{int(distwidth(rng)), int(distheight(rng))};
+        points.at(i) = SDL_Point{int(distwidth(rng)), int(distheight(rng))};
     }
+    stars->set_points(points);
 }
 
 BackgroundImage::BackgroundImage()
 {
-    m_graphics = new GraphicalPoints(false);
-    m_graphics->setColor(color::white);
+    stars = new GraphicalPoints(false);
+    stars->setColor(color::white);
     generate_random_stars();
 }
 
 BackgroundImage::~BackgroundImage()
 {
-    delete(m_graphics);
+    delete(stars);
+}
+
+void BackgroundImage::draw(Renderer& renderer)
+{
+    stars->invoke_renderer(renderer);
 }
 
 void Terrain::generate_random_terrain()
@@ -45,18 +46,23 @@ void Terrain::generate_random_terrain()
         }
         points[i] = SDL_Point{SCREEN_WIDTH/HILLS_COUNT*i,SCREEN_HEIGHT-height};
     }
+    hills->set_points(points);
+}
+void Terrain::draw(Renderer& renderer)
+{
+    hills->invoke_renderer(renderer);
 }
 
 Terrain::Terrain()
 {
-    m_graphics = new GraphicalPoints(true);
-    m_graphics->setColor(color::white);
+    hills = new GraphicalPoints(true);
+    hills->setColor(color::white);
     generate_random_terrain();
 }
 
 Terrain::~Terrain()
 {
-
+    delete(hills);
 }
 
 Lander::Lander()
@@ -67,4 +73,9 @@ Lander::Lander()
 Lander::~Lander()
 {
     
+}
+
+void Lander::draw(Renderer& renderer)
+{
+
 }

@@ -37,6 +37,7 @@ public:
     GraphicalPoints(bool connected): points_are_connected(connected){};
     void invoke_renderer(Renderer&) override final;
     auto get_points() const{return points.data();};
+    void set_points(std::vector<SDL_Point>&);
     auto get_size() const{return points.size();};
     bool points_are_connected;
 protected:
