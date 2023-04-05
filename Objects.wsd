@@ -149,21 +149,16 @@ together {
     }
 }
 
-' class UI{
-'     +get_quad(): SDL_Rect
-'     -ui_elements: list
-'     -fonts: array
-' }
-' abstract UIElement{
-'     -position: SDL_Point
-'     -size: SDL_Point
-' }
+class UI{
+    +draw()
+    -ui_elements: vector
+}
 
 Game *-- Physics
 Game *-- Player
 Game *-- Terrain
 Game *-- GameWindow
-' Game *-- UI
+Game *-- UI
 GameWindow *-down- Renderer
 GameWindow *-- InputHandler
 
@@ -178,16 +173,14 @@ GameObject <|-- Terrain
 GameObject <|-- Lander
 GameObject <|-- LandingZone
 GameObject <|-- BackgroundImage
-' GraphicalText <|.. UITextElement
+GameObject <|-- UI
 
 Lander *-- GraphicalPoints
 BackgroundImage *-- GraphicalPoints
 Terrain *-- GraphicalPoints
 LandingZone *-- GraphicalText
+UI *-- GraphicalText
 
-' UIElement <|.right. UITextElement
-' UIElement <|.left. UIGraphicalElement
 Lander  *-- RigidBody
 Player *-- Lander
 Terrain *-right- "1.*"LandingZone
-' UI *-- "1.*" UIElement

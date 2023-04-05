@@ -3,28 +3,13 @@
 #include <list>
 #include <SDL.h>
 #include "graphics.h"
+#include "game_objects.h"
 
-
-
-class UIElement {
+class UI: public GameObject {
 public:
-    SDL_Rect get_quad();
-protected:
-    SDL_Point position;
-    SDL_Point size;
-};
-
-class UITextElement: public UIElement, public GraphicalText{
-public:  
+    UI();
+    ~UI();
+    void draw(Renderer&) override;
 private:
-};
-
-class UI {
-public:
-    // void set_renderer(SDL_Renderer* renderer_){renderer = renderer_;};
-    // void draw_ui();
-    // void add_ui_element(UIElement*);
-
-private:
-    std::list<UIElement*> ui_elements;
+    std::vector<GraphicalText*> ui_elements;
 };
