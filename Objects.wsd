@@ -1,9 +1,11 @@
 @startuml lunar-lander
 skinparam groupInheritance 3
 title lunar-lander
+
 Interface PhysicalObject{
     #m_collisions_enabled: bool
 }
+
 class RigidBody{
     #m_gravity_enabled: bool
     #m_weight: int
@@ -24,25 +26,24 @@ class RigidBody{
 class StaticObject{
 
 }
+
 interface GraphicalObject{
     -color: SDL_Color
     +set_color()
     +get_color()
     +{abstract} invoke_render(Renderer&)
 }
+
 class GraphicalPoints{
     +points_are_connected: bool
     +invoke_renderer(Renderer&)
     +get_points() const: SDL_Point*
+    +set_points(&vector<SDL_Point>)
     +get_size(): int
     -points: vector<SDL_Point>
 
 }
 
-class GraphicalGeometry{
-    +invoke_renderer(Renderer&)
-    #vertex: vector<SDL_Point>
-}
 class GraphicalText{
     #m_rect: SDL_Rect
     #m_modified: bool
@@ -56,13 +57,13 @@ class GraphicalText{
     +get_text()
     +get_font
 }
+
 class GraphicalBitmap{
 
 }
+
 interface GameObject{
     #m_position: SDL_Point
-    #m_graphics: GraphicalObject*
-    #m_physics: PhysicalObject*
     +draw(SDL_Renderer*)
     +get_position()
     +update()
@@ -94,13 +95,15 @@ class Renderer{
     +set_drawing_color(SDL_Color)
     +clear_screen()
     +show_screem()
-    +render_points(GraphicalPoints*)
     +render_line(GraphicalLines*)
-    +render_geometry(GraphicalGeometry*)
     +render_text(GraphicalText*)
     -renderer: SDL_Renderer*
     -fonts: array
     -textures_for_text_rendering: unordered_map
+}
+
+class InputHandler{
+
 }
 
 class Player{
@@ -108,30 +111,42 @@ class Player{
     +add_points()
     +evaluate_landing()
 }
+
 class Physics{
     -physical_objects: list
     +update_physics()
     -check_collisions()
 }
+
 together {
-together {
-class LandingZone{
-    +award
-    +get_points()
-}
-class Terrain{
-    +Terrain()
-    -generate_hills()
-}
-}
-class BackgroundImage{
-    +BackgrounImage();
-    -generate_random_stars()
-}
-class Lander{
-    +fuel
-    +explode()
-}
+    together {
+        class LandingZone{
+            +draw()
+            +award
+            +get_points()
+        }
+
+        class Terrain{
+            +Terrain()
+            +draw()
+            -generate_hills()
+            -hills: GraphicalPoints
+        }
+    }
+
+    class BackgroundImage{
+        +BackgrounImage()
+        +draw()
+        -generate_random_stars()
+        -stars: GraphicalPoints
+    }
+
+    class Lander{
+        +draw()
+        +fuel
+        +explode()
+        -chassis: GraphicalPoints
+    }
 }
 
 ' class UI{
@@ -155,7 +170,6 @@ GameWindow *-- InputHandler
 PhysicalObject <|-- RigidBody
 PhysicalObject <|-- StaticObject
 
-GraphicalObject <|.. GraphicalGeometry
 GraphicalObject <|.. GraphicalPoints
 GraphicalObject <|.. GraphicalText
 GraphicalObject <|.. GraphicalBitmap
@@ -166,7 +180,7 @@ GameObject <|-- LandingZone
 GameObject <|-- BackgroundImage
 ' GraphicalText <|.. UITextElement
 
-Lander *-- GraphicalGeometry
+Lander *-- GraphicalPoints
 BackgroundImage *-- GraphicalPoints
 Terrain *-- GraphicalPoints
 LandingZone *-- GraphicalText
