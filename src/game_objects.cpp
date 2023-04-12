@@ -19,7 +19,7 @@ void BackgroundImage::generate_random_stars()
 BackgroundImage::BackgroundImage()
 {
     stars = new GraphicalPoints(false);
-    stars->setColor(color::white);
+    stars->set_color(color::white);
     generate_random_stars();
 }
 
@@ -30,7 +30,7 @@ BackgroundImage::~BackgroundImage()
 
 void BackgroundImage::draw(Renderer& renderer)
 {
-    stars->invoke_renderer(renderer);
+    stars->invoke_renderer(renderer, m_position);
 }
 
 void Terrain::generate_random_terrain()
@@ -51,13 +51,13 @@ void Terrain::generate_random_terrain()
 }
 void Terrain::draw(Renderer& renderer)
 {
-    hills->invoke_renderer(renderer);
+    hills->invoke_renderer(renderer, m_position);
 }
 
 Terrain::Terrain()
 {
     hills = new GraphicalPoints(true);
-    hills->setColor(color::white);
+    hills->set_color(color::white);
     generate_random_terrain();
 }
 
