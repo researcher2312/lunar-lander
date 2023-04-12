@@ -1,6 +1,7 @@
 #include <random>
 #include "game_objects.h"
 #include "game.h"
+#include "lander_points.h"
 
 void BackgroundImage::generate_random_stars()
 {
@@ -67,15 +68,17 @@ Terrain::~Terrain()
 
 Lander::Lander()
 {
-
+    chassis = new GraphicalPoints(true);
+    chassis->set_color(color::white);
+    chassis->set_points(test);
 }
 
 Lander::~Lander()
 {
-    
+    delete(chassis);
 }
 
 void Lander::draw(Renderer& renderer)
 {
-
+    chassis->invoke_renderer(renderer, m_position);
 }

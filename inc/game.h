@@ -38,4 +38,5 @@ private:
     UI ui;
     BackgroundImage background;
     Terrain terrain;
+    Lander lander;
 };
