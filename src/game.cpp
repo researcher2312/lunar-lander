@@ -87,6 +87,11 @@ void Game::start()
 
 void Game::update()
 {
+    frame_number += 1;
     window.update_graphics();
+    // physics.tick();
+    if (frame_number%1000 == 0) {
+        lander.move();
+    }
     // ui.draw_ui();
 }

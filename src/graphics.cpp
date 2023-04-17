@@ -78,8 +78,8 @@ void Renderer::set_drawing_color(const SDL_Color& color)
 void Renderer::render_points(const GraphicalPoints* rendered, SDL_Point root_position)
 {
     std::vector<SDL_Point>relative_points(rendered->get_size());
-    std::transform(rendered->get_points()->begin(),
-                   rendered->get_points()->end(),
+    std::transform(rendered->get_points().cbegin(),
+                   rendered->get_points().cend(),
                    relative_points.begin(),
                    [root_position](const SDL_Point& position){return position+root_position;});
     set_drawing_color(rendered->get_color());

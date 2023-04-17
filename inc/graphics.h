@@ -36,12 +36,13 @@ class GraphicalPoints: public virtual GraphicalObject {
 public:
     GraphicalPoints(bool connected): points_are_connected(connected){};
     void invoke_renderer(Renderer&, SDL_Point) override final;
-    auto get_points() const{return &points;};
+    const std::vector<SDL_Point>& get_points() const {return points;};
     void set_points(std::vector<SDL_Point>&);
     auto get_size() const{return points.size();};
     bool points_are_connected;
 protected:
     std::vector<SDL_Point> points;
+    std::vector<SDL_Point> points_relative;
 };
 
 class GraphicalText: public virtual GraphicalObject {
