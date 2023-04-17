@@ -58,9 +58,14 @@ Game::Game()
 {
     window.add_new_graphical_object(&background);
     window.add_new_graphical_object(&terrain);
-    lander.set_position(SDL_Point{69, 69});
     window.add_new_graphical_object(&lander);
     window.add_new_graphical_object(&ui);
+
+    physics.add_new_physical_object(&lander);
+
+    lander.set_position(SDL_Point{250, 0});
+    ui.set_position(SDL_Point{250, 0});
+
 }
 
 Game::~Game()

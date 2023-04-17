@@ -37,8 +37,10 @@ public:
     void get_user_input();
 private:
     GameWindow window;
+    Physics physics;
     UI ui;
     BackgroundImage background;
     Terrain terrain;
     Lander lander;
+    unsigned int frame_number = 0;
 };
