@@ -7,7 +7,9 @@
 #include <SDL_ttf.h>
 #include "ui.h"
 #include "graphics.h"
-#include "game_objects.h"
+#include "physics.h"
+#include "game_object.h"
+#include "user.objects.h"
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;

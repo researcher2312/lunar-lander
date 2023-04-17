@@ -3,7 +3,7 @@
 #include <list>
 #include <SDL.h>
 #include "graphics.h"
-#include "game_objects.h"
+#include "game_object.h"
 
 class UI: public GameObject {
 public:

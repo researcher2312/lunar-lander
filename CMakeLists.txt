@@ -14,9 +14,11 @@ PKG_SEARCH_MODULE(SDL2_TTF REQUIRED SDL2_ttf>=2.0.0)
 set(SOURCES
     src/main.cpp
     src/game.cpp
-    src/game_objects.cpp
+    src/game_object.cpp
+    src/user_objects.cpp
     src/graphics.cpp
     src/ui.cpp
+    src/physics.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

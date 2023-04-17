@@ -2,20 +2,10 @@
 
 #include "graphics.h"
 #include "physics.h"
+#include "game_object.h"
 
 constexpr int STAR_COUNT = 80;
 constexpr int HILLS_COUNT = 200;
-constexpr SDL_Point ROOT_ZERO{0,0};
-
-class GameObject {
-public:
-    virtual void draw(Renderer&)=0;
-    SDL_Point get_position() const;
-    void set_position(const SDL_Point& position){m_position = position;};
-    void update();
-protected:
-    SDL_Point m_position;
-};
 
 class BackgroundImage: public GameObject {
 public:
@@ -42,6 +32,8 @@ public:
     Lander();
     virtual ~Lander();
     void draw(Renderer& renderer) override;
+    void move();
 private:
     GraphicalPoints* chassis;
+    // PhysicalObject* physics;
 };
