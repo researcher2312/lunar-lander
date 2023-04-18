@@ -63,8 +63,8 @@ Game::Game()
 
     physics.add_new_physical_object(&lander);
 
-    lander.set_position(SDL_Point{250, 0});
-    ui.set_position(SDL_Point{250, 0});
+    // lander.set_position(SDL_Point{250, 0});
+    // ui.set_position(SDL_Point{250, 0});
 
 }
 
@@ -77,6 +77,7 @@ void Game::start()
     std::cerr << "Game started\n";
     bool quit = false;
     SDL_Event e;
+    fps_timer.start();
     while(!quit) {
         //Handle events on queue
         while(SDL_PollEvent(&e) != 0){
@@ -92,10 +93,10 @@ void Game::start()
 void Game::update()
 {
     frame_number += 1;
+    physics.tick();
     window.update_graphics();
-    // physics.tick();
     if (frame_number%1000 == 0) {
-        lander.move();
+        std::cerr <<  frame_number / (fps_timer.get_ticks() / 1000.f) << '\n';
     }
     // ui.draw_ui();
 }

@@ -36,6 +36,7 @@ public:
     void update();
     void get_user_input();
 private:
+    Timer fps_timer;
     GameWindow window;
     Physics physics;
     UI ui;

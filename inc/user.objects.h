@@ -12,6 +12,7 @@ public:
     BackgroundImage();
     virtual ~BackgroundImage();
     void draw(Renderer& renderer) override;
+    void update(float) override;
 private:
     GraphicalPoints* stars;
     void generate_random_stars();
@@ -22,6 +23,7 @@ public:
     Terrain();
     virtual ~Terrain();
     void draw(Renderer& renderer) override;
+    void update(float) override;
 private:
     GraphicalPoints* hills;
     void generate_random_terrain();
@@ -32,8 +34,8 @@ public:
     Lander();
     virtual ~Lander();
     void draw(Renderer& renderer) override;
-    void move();
+    void update(float) override;
 private:
     GraphicalPoints* chassis;
-    // PhysicalObject* physics;
+    RigidBody* physics;
 };

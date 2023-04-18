@@ -1,4 +1,5 @@
 #include <random>
+#include <iostream>
 #include "game.h"
 #include "user.objects.h"
 #include "lander_points.h"
@@ -30,7 +31,12 @@ BackgroundImage::~BackgroundImage()
 
 void BackgroundImage::draw(Renderer& renderer)
 {
-    stars->invoke_renderer(renderer, m_position);
+    stars->invoke_renderer(renderer);
+}
+
+void BackgroundImage::update(float)
+{
+
 }
 
 void Terrain::generate_random_terrain()
@@ -51,7 +57,7 @@ void Terrain::generate_random_terrain()
 }
 void Terrain::draw(Renderer& renderer)
 {
-    hills->invoke_renderer(renderer, m_position);
+    hills->invoke_renderer(renderer);
 }
 
 Terrain::Terrain()
@@ -66,27 +72,33 @@ Terrain::~Terrain()
     delete(hills);
 }
 
+void Terrain::update(float)
+{
+
+}
+
 Lander::Lander()
 {
     chassis = new GraphicalPoints(true);
     chassis->set_color(color::white);
     chassis->set_points(test);
-
-    // physics = new PhysicalObject(1000);
+    physics = new RigidBody(1000);
 }
 
 Lander::~Lander()
 {
     delete(chassis);
-    // delete(physics);
+    delete(physics);
 }
 
 void Lander::draw(Renderer& renderer)
 {
-    chassis->invoke_renderer(renderer, m_position);
+    chassis->invoke_renderer(renderer);
 }
 
-void Lander::move()
+void Lander::update(float frame_time)
 {
-    m_position.y += 1;
+    physics->update(frame_time);
+    chassis->set_position(physics->get_position());
+    // std::cerr << physics->get_position().x << ' ' << physics->get_position().y << '\n';
 }

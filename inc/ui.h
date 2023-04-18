@@ -10,6 +10,7 @@ public:
     UI();
     ~UI();
     void draw(Renderer&) override;
+    void update(float) override;
 private:
     std::vector<GraphicalText*> ui_elements;
 };

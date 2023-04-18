@@ -1,18 +1,20 @@
 #include <algorithm>
 #include <iostream>
+#include "utils.h"
 #include "graphics.h"
 
 constexpr int SCREEN_WIDTH = 640;
 constexpr int SCREEN_HEIGHT = 480;
 
-inline SDL_Point operator+(const SDL_Point& a, const SDL_Point& b)
+void GraphicalObject::set_position(const SDL_FPoint& position)
 {
-    return SDL_Point{a.x+b.x, a.y+b.y};
+    m_screen_position.x = int(position.x);
+    m_screen_position.y = int(position.y);
 }
 
-void GraphicalPoints::invoke_renderer(Renderer& renderer, SDL_Point root_position)
+void GraphicalPoints::invoke_renderer(Renderer& renderer)
 {
-    renderer.render_points(this, root_position);
+    renderer.render_points(this, m_screen_position);
 }
 
 void GraphicalPoints::set_points(std::vector<SDL_Point>& new_points)
@@ -20,13 +22,13 @@ void GraphicalPoints::set_points(std::vector<SDL_Point>& new_points)
     points = std::move(new_points);
 }
 
-void GraphicalText::invoke_renderer(Renderer& renderer, SDL_Point root_position)
+void GraphicalText::invoke_renderer(Renderer& renderer)
 {
     if (m_modified) {
         renderer.render_texture_from_text(this);
         m_modified = 0;
     }
-    renderer.render_text(this, root_position);
+    renderer.render_text(this, m_screen_position);
 }
 
 void GraphicalText::set_text(std::string text_, font_type font_)
@@ -48,7 +50,7 @@ void GraphicalText::set_size(SDL_Point position)
     m_rect.h = position.y;
 }
 
-void GraphicalGeometry::invoke_renderer(Renderer& renderer, SDL_Point root_position)
+void GraphicalGeometry::invoke_renderer(Renderer& renderer)
 {
     renderer.render_geometry(this);
 }
@@ -57,7 +59,7 @@ Renderer::Renderer(SDL_Window* window)
 {
     fonts[TITLE_FONT] = TTF_OpenFont("../resources/oscilloscope.ttf",35);
     fonts[UI_FONT] = TTF_OpenFont("../resources/oscilloscope.ttf",15);
-    renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     set_drawing_color(color::white);
     SDL_RenderClear(renderer);
 }

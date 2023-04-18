@@ -1,3 +1,5 @@
+#include <iostream>
+#include "utils.h"
 #include "physics.h"
 
 Timer::Timer()
@@ -28,71 +30,84 @@ Uint32 Timer::get_ticks()
     }
 }
 
-inline SDL_Point operator+(const SDL_Point& a, const SDL_Point& b)
+RigidBody::RigidBody(int mass_kg = 0)
 {
-    return SDL_Point{a.x+b.x, a.y+b.y};
-}
-
-PhysicalObject::PhysicalObject(int mass_kg = 0)
-{
+    m_position_m = FROOT_ZERO;
     m_mass_kg = mass_kg;
+    m_rotation = 0;
+    m_speed_m_s = FPOINT_ZERO;
+    m_rotation_speed = 0;
+    m_overall_force_N = FPOINT_ZERO;
     m_gravity_enabled = true;
 }
 
-void PhysicalObject::update()
+void RigidBody::update(float time)
 {
     if (m_gravity_enabled) {
         apply_force(G_FORCE);
     }
-    // m_speed_m_s += tick*m_overall_force/m_mass_kg;
-
-
+    std::cerr << "Time:" << time;
+    std::cerr << " Force:" << m_overall_force_N.y;
+    m_speed_m_s = m_speed_m_s + time*m_overall_force_N/m_mass_kg;
+    std::cerr << " Speed:" << m_speed_m_s.y;
+    m_position_m = m_position_m + time*m_speed_m_s;
+    std::cerr << " Position:" << m_position_m.y << '\n';
+    m_overall_force_N = FPOINT_ZERO;
 }
 
-void PhysicalObject::set_position(SDL_Point position)
+void RigidBody::set_position(SDL_FPoint position)
 {
     m_position_m = position;
 }
 
-void PhysicalObject::set_speed(SDL_Point speed)
+void RigidBody::set_speed(SDL_FPoint speed)
 {
     m_speed_m_s = speed;
 }
 
-void PhysicalObject::move(SDL_Point movement)
+void RigidBody::move(SDL_FPoint movement)
 {
     m_position_m = m_position_m+movement;
 }
 
-void PhysicalObject::set_rotation(int rotation)
+void RigidBody::set_rotation(int rotation)
 {
     m_rotation = rotation;
 }
 
-void PhysicalObject::set_rotation_speed(int rotation_speed)
+void RigidBody::set_rotation_speed(int rotation_speed)
 {
     m_rotation_speed = rotation_speed;
 }
 
-void PhysicalObject::apply_force(SDL_Point force)
+void RigidBody::apply_force(SDL_FPoint force)
 {
     m_overall_force_N = m_overall_force_N+force;
 }
 
-// Physics::Physics()
-// {
-
-// }
+Physics::Physics()
+{
+    m_previous_frame_ticks = 0;
+}
 
 // Physics::~Physics()
 // {
 
 // }
 
-void Physics::update_physics()
+void Physics::tick()
 {
-
+    auto current_ticks = SDL_GetTicks() - m_previous_frame_ticks;
+    update_physics(current_ticks/1000.f);
     m_previous_frame_ticks = SDL_GetTicks();
+
+}
+
+void Physics::update_physics(float frame_duration)
+{
+    for (auto &rendered_object: m_physical_objects) {
+        rendered_object->update(frame_duration);
+    }
 }
 
 void Physics::add_new_physical_object(GameObject* new_object)

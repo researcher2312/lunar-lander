@@ -18,6 +18,11 @@ UI::~UI()
 void UI::draw(Renderer& renderer)
 {
     for (auto ui_element: ui_elements) {
-        ui_element->invoke_renderer(renderer, m_position);
+        ui_element->invoke_renderer(renderer);
     }
+}
+
+void UI::update(float)
+{
+
 }
