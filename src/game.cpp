@@ -63,6 +63,65 @@ void GameWindow::add_new_graphical_object(GameObject* new_object)
     m_graphical_objects.push_back(new_object);
 }
 
+/*!
+ * @brief Save a function to be performed when a certain key is pressed
+ * or released.
+ * 
+ * @param key 
+ * @param event 
+ * @param function 
+ */
+void InputHandler::subscribe_action(SDL_Keycode key,
+                                    SDL_EventType event,
+                                    SignalReceiver* receiver)
+{
+    if (event == SDL_KEYDOWN) {
+        assigned_actions_press.insert({key, receiver});
+    }
+    else if (event == SDL_KEYUP) {
+        assigned_actions_lift.insert({key, receiver});
+    }
+
+}
+
+/*!
+ * @brief Delete a connection between a key press/lift and a function call
+ * 
+ * @param key 
+ * @param event 
+ */
+void InputHandler::delete_action(SDL_Keycode key, SDL_EventType event)
+{
+    if (event == SDL_KEYDOWN) {
+        assigned_actions_press.erase(key);
+    }
+    else if (event == SDL_KEYUP) {
+        assigned_actions_lift.erase(key);
+    }
+}
+
+/*!
+ * @brief Check the list of key subscriptions and activate the chosen keys
+ * 
+ * @param event 
+ */
+void InputHandler::handle_game_input(const SDL_Event& event)
+{
+    SDL_Keycode pressed_key = event.key.keysym.sym;
+    if (event.type == SDL_KEYDOWN) {
+        if (assigned_actions_press.find(pressed_key) !=
+            assigned_actions_press.end()) {
+            assigned_actions_press.at(pressed_key)->receive_key_press(pressed_key);
+        }
+    }
+    else if (event.type == SDL_KEYUP) {
+        if (assigned_actions_lift.find(pressed_key) !=
+            assigned_actions_lift.end()) {
+            assigned_actions_lift.at(pressed_key)->receive_key_release(pressed_key);
+        }
+    }
+}
+
 Game::Game()
 {
     window.add_new_graphical_object(&background);
@@ -70,6 +129,9 @@ Game::Game()
     window.add_new_graphical_object(&lander);
     window.add_new_graphical_object(&ui);
     physics.add_new_physical_object(&lander);
+
+    m_input_handler.subscribe_action(SDLK_UP, SDL_KEYDOWN, &lander);
+    m_input_handler.subscribe_action(SDLK_UP, SDL_KEYUP, &lander);
 
     // lander.set_position(SDL_Point{250, 0});
     // ui.set_position(SDL_Point{250, 0});
@@ -97,6 +159,13 @@ void Game::start()
             if(e.type == SDL_QUIT) {
                 quit = true;
             }
+            /*else if (e.type == SDL_KEYDOWN) {
+                user_key_down(e.key.keysym.sym);
+            }
+            else if (e.type == SDL_KEYUP) {
+                user_key_up(e.key.keysym.sym);
+            }*/
+            m_input_handler.handle_game_input(e);
         }
         update();
     }

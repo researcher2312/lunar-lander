@@ -83,6 +83,7 @@ Lander::Lander()
     chassis->set_color(color::white);
     chassis->set_points(test);
     physics = new RigidBody(1000);
+    engine_on = false;
 }
 
 Lander::~Lander()
@@ -98,7 +99,21 @@ void Lander::draw(Renderer& renderer)
 
 void Lander::update(float frame_time)
 {
+    if(engine_on) {
+        physics->apply_force({0, -20});
+    }
     physics->update(frame_time);
     chassis->set_position(physics->get_position());
     // std::cerr << physics->get_position().x << ' ' << physics->get_position().y << '\n';
+}
+
+
+void Lander::receive_key_press(SDL_Keycode)
+{
+    engine_on = true;
+}
+
+void Lander::receive_key_release(SDL_Keycode)
+{
+    engine_on = false;
 }

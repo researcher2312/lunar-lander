@@ -29,13 +29,16 @@ private:
     void generate_random_terrain();
 };
 
-class Lander: public GameObject {
+class Lander: public GameObject, public SignalReceiver {
 public:
     Lander();
     virtual ~Lander();
     void draw(Renderer& renderer) override;
     void update(float) override;
+    void receive_key_press(SDL_Keycode) override;
+    void receive_key_release(SDL_Keycode) override;
 private:
+    bool engine_on;
     GraphicalPoints* chassis;
     RigidBody* physics;
 };
