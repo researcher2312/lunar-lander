@@ -30,6 +30,11 @@ Uint32 Timer::get_ticks()
     }
 }
 
+/*!
+ * @brief Construct a new Rigid Body:: Rigid Body object
+ * 
+ * @param mass_kg 
+ */
 RigidBody::RigidBody(int mass_kg = 0)
 {
     m_position_m = FROOT_ZERO;
@@ -41,11 +46,18 @@ RigidBody::RigidBody(int mass_kg = 0)
     m_gravity_enabled = true;
 }
 
+/*!
+ * @brief Update the rigidbody's physics, using the time that has passed since
+ * the last frame
+ * 
+ * @param time the time that has passed since the last frame
+ */
 void RigidBody::update(float time)
 {
     if (m_gravity_enabled) {
         apply_force(G_FORCE);
     }
+
     std::cerr << "Time:" << time;
     std::cerr << " Force:" << m_overall_force_N.y;
     m_speed_m_s = m_speed_m_s + time*m_overall_force_N/m_mass_kg;
@@ -70,16 +82,33 @@ void RigidBody::move(SDL_FPoint movement)
     m_position_m = m_position_m+movement;
 }
 
+/**
+ * @brief 
+ * 
+ * @param rotation 
+ */
 void RigidBody::set_rotation(int rotation)
 {
     m_rotation = rotation;
 }
 
+/*!
+ * @brief Set rotation speed
+ * 
+ * @param rotation_speed 
+ */
 void RigidBody::set_rotation_speed(int rotation_speed)
 {
     m_rotation_speed = rotation_speed;
 }
 
+/*!
+ * @brief Apply fore to the rigidbody
+ *
+ * The force is deleted in the next physics update
+ * 
+ * @param force 
+ */
 void RigidBody::apply_force(SDL_FPoint force)
 {
     m_overall_force_N = m_overall_force_N+force;
@@ -103,6 +132,11 @@ void Physics::tick()
 
 }
 
+/*!
+ * @brief Update the physics system after duration of the frame
+ * 
+ * @param frame_duration 
+ */
 void Physics::update_physics(float frame_duration)
 {
     for (auto &rendered_object: m_physical_objects) {

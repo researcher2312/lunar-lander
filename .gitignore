@@ -1,5 +1,7 @@
 /obj
 /build
+/html
+/latex
 *.out
 *.o
 *code*

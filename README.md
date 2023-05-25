@@ -7,7 +7,7 @@ Built using C++, SDL2, and Cmake.
 An educational project to better learn object oriented programming and design patterns.
 
 ## Proposed class diagram:
-![Class diagram for the program](lunar-lander.png "Class diagram")
+<img src="lunar-lander.png" style="width: 100%" alt="Class diagram for the program"/>
 
 ## Install instructions:
 You need to have libsdl2-dev and libsdl2-ttf-dev installed. Then, create a build folder inside the game folder, and invoke cmake with

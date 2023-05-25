@@ -14,6 +14,10 @@
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
+/**
+ * @brief Class for managing graphical display and rendering.
+ * 
+ */
 class GameWindow {
 public:
     GameWindow();

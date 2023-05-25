@@ -36,6 +36,10 @@ GameWindow::~GameWindow()
     std::cerr<<"GameWindow destroyed\n";
 }
 
+/*!
+ * @brief Performs all redrawing
+ * 
+ */
 void GameWindow::update_graphics()
 {
     //Clear screen
@@ -49,6 +53,11 @@ void GameWindow::update_graphics()
     m_renderer->show_screen();
 }
 
+/*!
+ * @brief Adds new graphical object to list of rendered objects
+ * 
+ * @param new_object 
+ */
 void GameWindow::add_new_graphical_object(GameObject* new_object)
 {
     m_graphical_objects.push_back(new_object);
@@ -60,7 +69,6 @@ Game::Game()
     window.add_new_graphical_object(&terrain);
     window.add_new_graphical_object(&lander);
     window.add_new_graphical_object(&ui);
-
     physics.add_new_physical_object(&lander);
 
     // lander.set_position(SDL_Point{250, 0});
@@ -72,6 +80,10 @@ Game::~Game()
 {
 }
 
+/*!
+ * @brief launches the main game loop
+ * 
+ */
 void Game::start()
 {
     std::cerr << "Game started\n";
@@ -90,6 +102,11 @@ void Game::start()
     }
 }
 
+/*!
+ * @brief performs the update at the end of a frame
+ * 
+ * This function performs an update of physics, graphics and frame number
+ */
 void Game::update()
 {
     frame_number += 1;

@@ -23,6 +23,7 @@ class RigidBody{
     +set_rotation_speed()
     +apply_force()
 }
+
 class StaticObject{
 
 }
@@ -63,10 +64,8 @@ class GraphicalBitmap{
 }
 
 interface GameObject{
-    #m_position: SDL_Point
-    +draw(SDL_Renderer*)
-    +get_position()
-    +update()
+    +{abstract}draw(SDL_Renderer*)
+    +{abstract}update(float dt)
 }
 
 class Game{
@@ -103,7 +102,9 @@ class Renderer{
 }
 
 class InputHandler{
-
+    +subscribe_action()
+    +delete_action()
+    +handle_game_input()
 }
 
 class Player{
@@ -118,37 +119,6 @@ class Physics{
     -check_collisions()
 }
 
-together {
-    together {
-        class LandingZone{
-            +draw()
-            +award
-            +get_points()
-        }
-
-        class Terrain{
-            +Terrain()
-            +draw()
-            -generate_hills()
-            -hills: GraphicalPoints
-        }
-    }
-
-    class BackgroundImage{
-        +BackgrounImage()
-        +draw()
-        -generate_random_stars()
-        -stars: GraphicalPoints
-    }
-
-    class Lander{
-        +draw()
-        +fuel
-        +explode()
-        -chassis: GraphicalPoints
-    }
-}
-
 class UI{
     +draw()
     -ui_elements: vector
@@ -156,7 +126,6 @@ class UI{
 
 Game *-- Physics
 Game *-- Player
-Game *-- Terrain
 Game *-- GameWindow
 Game *-- UI
 GameWindow *-down- Renderer
@@ -169,18 +138,5 @@ GraphicalObject <|.. GraphicalPoints
 GraphicalObject <|.. GraphicalText
 GraphicalObject <|.. GraphicalBitmap
 
-GameObject <|-- Terrain
-GameObject <|-- Lander
-GameObject <|-- LandingZone
-GameObject <|-- BackgroundImage
 GameObject <|-- UI
-
-Lander *-- GraphicalPoints
-BackgroundImage *-- GraphicalPoints
-Terrain *-- GraphicalPoints
-LandingZone *-- GraphicalText
 UI *-- GraphicalText
-
-Lander  *-- RigidBody
-Player *-- Lander
-Terrain *-right- "1.*"LandingZone

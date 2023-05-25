@@ -25,6 +25,10 @@ namespace color
 
 class Renderer;
 
+/*!
+ * @brief Abstract graphical object class
+ *
+ */
 class GraphicalObject {
 public:
     virtual void invoke_renderer(Renderer&)=0;
@@ -38,6 +42,11 @@ protected:
     SDL_Point m_screen_position = ROOT_ZERO;
 };
 
+/*!
+ * @brief Representation of object consisting of points, which may be connected
+ * by lines
+ * 
+ */
 class GraphicalPoints: public virtual GraphicalObject {
 public:
     GraphicalPoints(bool connected): points_are_connected(connected){};
@@ -45,12 +54,20 @@ public:
     const std::vector<SDL_Point>& get_points() const {return points;};
     void set_points(std::vector<SDL_Point>&);
     auto get_size() const{return points.size();};
+    /*!
+     * @brief decides if the points will be joined by lines
+     * 
+     */
     bool points_are_connected;
 protected:
     std::vector<SDL_Point> points;
     std::vector<SDL_Point> points_relative;
 };
 
+/*!
+ * @brief Graphical representation of text
+ * 
+ */
 class GraphicalText: public virtual GraphicalObject {
 public:
     SDL_Rect get_quad() const {return m_rect;};
@@ -76,6 +93,10 @@ protected:
     // std::vector<SDL_Point> vertex;
 };
 
+/*!
+ * @brief Wrapper for SDL function containing the renderer
+ * 
+ */
 class Renderer {
 public:
     Renderer(SDL_Window*);

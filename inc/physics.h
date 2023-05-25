@@ -7,6 +7,10 @@
 constexpr SDL_FPoint G_FORCE{0, 10};
 constexpr SDL_FPoint FPOINT_ZERO{0,0};
 
+/*!
+ * @brief Timer to measure milisecond timespans
+ * 
+ */
 class Timer{
 public:
     Timer();
@@ -19,14 +23,26 @@ private:
     bool m_started;
 };
 
+/*!
+ * @brief Abstract representation of any physical body
+ * 
+ */
 class PhysicalObject {
 public:
     void update(float dt);
     bool collisions_enabled;
 };
 
-//use basic SI units
-class RigidBody {
+/*!
+ * @brief Representation of rigid, point-size body
+ *
+ * The physics simulation is calculated as though the body was a size
+ * of a point, concentrating the mass in this point. The collider can represent
+ * any other shape, but the body stays the size of a single point.
+ * 
+ * All units in class represent SI units. 
+ */
+class RigidBody: public PhysicalObject {
 public:
     RigidBody(int mass_kg);
     void set_position(SDL_FPoint);
@@ -49,6 +65,10 @@ protected:
     SDL_FPoint m_overall_force_N;
 };
 
+/*!
+ * @brief Class to handle all physics interactions
+ * 
+ */
 class Physics {
 public:
     Physics();
