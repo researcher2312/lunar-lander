@@ -181,8 +181,8 @@ void Game::update()
     frame_number += 1;
     physics.tick();
     window.update_graphics();
-    if (frame_number%1000 == 0) {
-        std::cerr <<  frame_number / (fps_timer.get_ticks() / 1000.f) << '\n';
-    }
+    // if (frame_number%1000 == 0) {
+    //     std::cerr <<  frame_number / (fps_timer.get_ticks() / 1000.f) << '\n';
+    // }
     // ui.draw_ui();
 }

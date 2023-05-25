@@ -4,17 +4,18 @@ title lunar-lander
 
 Interface PhysicalObject{
     #m_collisions_enabled: bool
+    +{abstract}update(float dt)
 }
 
 class RigidBody{
     #m_gravity_enabled: bool
     #m_weight: int
-    #m_rotation_inertia: int
-    #m_position: SDL_Point
-    #m_rotation: int
-    #m_speed: SDL_Point
-    #m_rotation_speed: int
-    #m_overall_force: SDL_Point
+    #m_rotation_inertia: float
+    #m_position: SDL_FPoint
+    #m_rotation: float
+    #m_speed: SDL_FPoint
+    #m_rotation_speed: float
+    #m_overall_force: SDL_FPoint
     +set_position()
     +set_speed()
     +move()

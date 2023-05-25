@@ -127,7 +127,7 @@ Physics::Physics()
 void Physics::tick()
 {
     auto current_ticks = SDL_GetTicks() - m_previous_frame_ticks;
-    update_physics(current_ticks/1000.f);
+    update_physics(current_ticks/20.f);
     m_previous_frame_ticks = SDL_GetTicks();
 
 }

@@ -29,7 +29,7 @@ private:
  */
 class PhysicalObject {
 public:
-    void update(float dt);
+    virtual void update(float dt)=0;
     bool collisions_enabled;
 };
 
@@ -53,15 +53,15 @@ public:
     void set_rotation(int);
     void set_rotation_speed(int);
     void apply_force(SDL_FPoint);
-    void update(float time);
+    void update(float dt);
 protected:
     bool m_gravity_enabled;
-    SDL_FPoint m_position_m;
     int m_mass_kg;
     int m_rotation_inertia_kg_m;
+    float m_rotation_speed;
     float m_rotation;
     SDL_FPoint m_speed_m_s;
-    float m_rotation_speed;
+    SDL_FPoint m_position_m;
     SDL_FPoint m_overall_force_N;
 };
 
