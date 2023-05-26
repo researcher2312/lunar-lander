@@ -50,8 +50,9 @@ public:
     void set_speed(SDL_FPoint);
     void move(SDL_FPoint);
     void rotate(int);
-    void set_rotation(int);
-    void set_rotation_speed(int);
+    void set_rotation(float);
+    float get_rotation()const {return m_rotation;};
+    void set_rotation_speed(float);
     void apply_force(SDL_FPoint);
     void update(float dt);
 protected:

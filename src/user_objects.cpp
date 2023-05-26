@@ -83,6 +83,8 @@ Lander::Lander()
     chassis->set_color(color::white);
     chassis->set_points(test);
     physics = new RigidBody(1000);
+    physics->set_position({50, 0});
+    physics->set_rotation_speed(0.03);
     engine_on = false;
 }
 
@@ -104,6 +106,7 @@ void Lander::update(float frame_time)
     }
     physics->update(frame_time);
     chassis->set_position(physics->get_position());
+    chassis->set_rotation(physics->get_rotation());
     // std::cerr << physics->get_position().x << ' ' << physics->get_position().y << '\n';
 }
 

@@ -37,36 +37,34 @@ public:
     SDL_Point get_position() const{return m_screen_position;};
     void set_position(const SDL_Point& position){m_screen_position = position;};
     void set_position(const SDL_FPoint& position);
+    void set_rotation(const float rotation){m_rotation = rotation;};
 protected:
     SDL_Color m_color;
+    float m_rotation = 0;
     SDL_Point m_screen_position = ROOT_ZERO;
 };
 
 /*!
  * @brief Representation of object consisting of points, which may be connected
  * by lines
- * 
  */
 class GraphicalPoints: public virtual GraphicalObject {
 public:
     GraphicalPoints(bool connected): points_are_connected(connected){};
     void invoke_renderer(Renderer&) override final;
-    const std::vector<SDL_Point>& get_points() const {return points;};
+    const std::vector<SDL_Point>& get_points() const {return points_transformed;};
     void set_points(std::vector<SDL_Point>&);
     auto get_size() const{return points.size();};
-    /*!
-     * @brief decides if the points will be joined by lines
-     * 
-     */
+    void transform_points();
+    void rotate_points();
     bool points_are_connected;
 protected:
     std::vector<SDL_Point> points;
-    std::vector<SDL_Point> points_relative;
+    std::vector<SDL_Point> points_transformed;
 };
 
 /*!
  * @brief Graphical representation of text
- * 
  */
 class GraphicalText: public virtual GraphicalObject {
 public:

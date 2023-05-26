@@ -135,7 +135,6 @@ Game::Game()
 
     // lander.set_position(SDL_Point{250, 0});
     // ui.set_position(SDL_Point{250, 0});
-
 }
 
 Game::~Game()
@@ -159,12 +158,6 @@ void Game::start()
             if(e.type == SDL_QUIT) {
                 quit = true;
             }
-            /*else if (e.type == SDL_KEYDOWN) {
-                user_key_down(e.key.keysym.sym);
-            }
-            else if (e.type == SDL_KEYUP) {
-                user_key_up(e.key.keysym.sym);
-            }*/
             m_input_handler.handle_game_input(e);
         }
         update();

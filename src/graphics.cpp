@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <cmath>
 #include "utils.h"
 #include "graphics.h"
 
@@ -14,12 +15,42 @@ void GraphicalObject::set_position(const SDL_FPoint& position)
 
 void GraphicalPoints::invoke_renderer(Renderer& renderer)
 {
+    transform_points();
     renderer.render_points(this, m_screen_position);
 }
 
 void GraphicalPoints::set_points(std::vector<SDL_Point>& new_points)
 {
     points = std::move(new_points);
+}
+
+SDL_Point rotate_point(const SDL_Point point, float angle)
+{
+    return SDL_Point{int(point.x*cos(angle)-point.y*sin(angle)),
+                     int(point.y*cos(angle)+point.x*sin(angle))};
+}
+
+/*!
+ * @brief Applies rotation around root point
+ * 
+ * The points are rotated according to internal m_rotation variable
+ */
+void GraphicalPoints::rotate_points()
+{
+    float angle = m_rotation;
+    std::transform(points.cbegin(), points.cend(),
+                   points_transformed.begin(),
+                   [angle](const SDL_Point& position){return rotate_point(position, angle);});
+}
+
+/*!
+ * @brief Applies all designed transformations to original point matrix
+ * 
+ */
+void GraphicalPoints::transform_points()
+{
+    points_transformed = points;
+    rotate_points();
 }
 
 void GraphicalText::invoke_renderer(Renderer& renderer)
@@ -31,10 +62,16 @@ void GraphicalText::invoke_renderer(Renderer& renderer)
     renderer.render_text(this, m_screen_position);
 }
 
-void GraphicalText::set_text(std::string text_, font_type font_)
+/*!
+ * @brief Sets the displayed text to given string
+ * 
+ * @param text The text to be displayed
+ * @param font The font to be used
+ */
+void GraphicalText::set_text(std::string text, font_type font)
 {
-    m_text = text_;
-    m_font = font_;
+    m_text = text;
+    m_font = font;
     m_modified = true;
 }
 
@@ -74,7 +111,6 @@ Renderer::~Renderer()
 void Renderer::set_drawing_color(const SDL_Color& color)
 {
     SDL_SetRenderDrawColor(renderer,color.r,color.g,color.b,color.a);
-
 }
 
 void Renderer::render_points(const GraphicalPoints* rendered, SDL_Point root_position)

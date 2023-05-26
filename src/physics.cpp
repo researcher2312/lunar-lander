@@ -58,12 +58,14 @@ void RigidBody::update(float time)
         apply_force(G_FORCE);
     }
 
-    std::cerr << "Time:" << time;
-    std::cerr << " Force:" << m_overall_force_N.y;
     m_speed_m_s = m_speed_m_s + time*m_overall_force_N/m_mass_kg;
-    std::cerr << " Speed:" << m_speed_m_s.y;
     m_position_m = m_position_m + time*m_speed_m_s;
-    std::cerr << " Position:" << m_position_m.y << '\n';
+
+    m_rotation = m_rotation + time*m_rotation_speed;
+    //std::cerr << "Time:" << time;
+    //std::cerr << " Force:" << m_overall_force_N.y;
+    // std::cerr << " Speed:" << m_speed_m_s.y;
+    //std::cerr << " Position:" << m_position_m.y << '\n';
     m_overall_force_N = FPOINT_ZERO;
 }
 
@@ -87,7 +89,7 @@ void RigidBody::move(SDL_FPoint movement)
  * 
  * @param rotation 
  */
-void RigidBody::set_rotation(int rotation)
+void RigidBody::set_rotation(float rotation)
 {
     m_rotation = rotation;
 }
@@ -97,7 +99,7 @@ void RigidBody::set_rotation(int rotation)
  * 
  * @param rotation_speed 
  */
-void RigidBody::set_rotation_speed(int rotation_speed)
+void RigidBody::set_rotation_speed(float rotation_speed)
 {
     m_rotation_speed = rotation_speed;
 }
