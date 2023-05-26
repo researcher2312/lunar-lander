@@ -11,7 +11,7 @@
 #include "graphics.h"
 #include "physics.h"
 #include "game_object.h"
-#include "user.objects.h"
+#include "user_objects.h"
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;

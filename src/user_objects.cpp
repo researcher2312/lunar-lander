@@ -1,7 +1,7 @@
 #include <random>
 #include <iostream>
 #include "game.h"
-#include "user.objects.h"
+#include "user_objects.h"
 #include "lander_points.h"
 
 void BackgroundImage::generate_random_stars()
