@@ -1,28 +1,74 @@
 @startuml lunar-lander
+skinparam groupInheritance 3
 title lunar-lander
-abstract PhysicalObject{
-    #weight
-    #position
-    #rotation
-    #speed
-    #momentum
-    +set_position()
-    +set_speed()
-    +set_momentum()
-    +apply_force()
-    +apply_rotation()
-    +move()
-}
-abstract GraphicalObject{
-    #vertice_list
-    +draw()
+
+Interface PhysicalObject{
+    #m_collisions_enabled: bool
+    +{abstract}update(float dt)
 }
 
-class BackgroundImage{
-    +BacgroundImage()
-    +~BackgrounImage()
-    -generate_random_stars()
+class RigidBody{
+    #m_gravity_enabled: bool
+    #m_weight: int
+    #m_rotation_inertia: float
+    #m_position: SDL_FPoint
+    #m_rotation: float
+    #m_speed: SDL_FPoint
+    #m_rotation_speed: float
+    #m_overall_force: SDL_FPoint
+    +set_position()
+    +set_speed()
+    +move()
+    +rotate()
+    +set_rotation()
+    +set_rotation_speed()
+    +apply_force()
 }
+
+class StaticObject{
+
+}
+
+interface GraphicalObject{
+    -color: SDL_Color
+    +set_color()
+    +get_color()
+    +{abstract} invoke_render(Renderer&)
+}
+
+class GraphicalPoints{
+    +points_are_connected: bool
+    +invoke_renderer(Renderer&)
+    +get_points() const: SDL_Point*
+    +set_points(&vector<SDL_Point>)
+    +get_size(): int
+    -points: vector<SDL_Point>
+
+}
+
+class GraphicalText{
+    #m_rect: SDL_Rect
+    #m_modified: bool
+    #text: string
+    #font: font_type
+    +get_quad()
+    +set_position()
+    +set_size()
+    +invoke_renderer(Renderer&)
+    +set_text(string, font_type)
+    +get_text()
+    +get_font
+}
+
+class GraphicalBitmap{
+
+}
+
+interface GameObject{
+    +{abstract}draw(SDL_Renderer*)
+    +{abstract}update(float dt)
+}
+
 class Game{
     +Game()
     +~Game()
@@ -31,48 +77,67 @@ class Game{
     +get_user_input()
     +update()
 }
-class Lander{
-    +fuel
-    +explode()
-}
-class Terrain{
-    -hills_list: list
-    -generate()
-}
+
 class GameWindow{
     +GameWindow()
     +~GameWindow()
+    -graphical_objects: list<GameObjects>
+    -SDL_Window
+    -renderer: unique_ptr<Renderer>
+    +update_graphics()
+    +add_new_graphical_object()
+    
 }
+
+class Renderer{
+    +Renderer(SDL_Window*)
+    +~Renderer()
+    +set_drawing_color(SDL_Color)
+    +clear_screen()
+    +show_screem()
+    +render_line(GraphicalLines*)
+    +render_text(GraphicalText*)
+    -renderer: SDL_Renderer*
+    -fonts: array
+    -textures_for_text_rendering: unordered_map
+}
+
+class InputHandler{
+    +subscribe_action()
+    +delete_action()
+    +handle_game_input()
+}
+
 class Player{
     +points
     +add_points()
     +evaluate_landing()
 }
+
 class Physics{
-    -physical_objects_list
+    -physical_objects: list
     +update_physics()
     -check_collisions()
 }
-class LandingZone{
-    +award
-    +get_points()
-}
+
 class UI{
-    +update_values()
-    +display_ui()
-    +display_message()
+    +draw()
+    -ui_elements: vector
 }
 
-PhysicalObject <|.. Lander
-GraphicalObject <|-- PhysicalObject
-GraphicalObject <|.. Terrain
-Game *-- GameWindow
-Player *-- Lander
 Game *-- Physics
 Game *-- Player
-Game *-- Terrain
-GraphicalObject <|.. LandingZone
-Terrain *- "1.*"LandingZone
-GraphicalObject <|.. UI
+Game *-- GameWindow
 Game *-- UI
-GraphicalObject <|.. BackgroundImage
+GameWindow *-down- Renderer
+GameWindow *-- InputHandler
+
+PhysicalObject <|-- RigidBody
+PhysicalObject <|-- StaticObject
+
+GraphicalObject <|.. GraphicalPoints
+GraphicalObject <|.. GraphicalText
+GraphicalObject <|.. GraphicalBitmap
+
+GameObject <|-- UI
+UI *-- GraphicalText
