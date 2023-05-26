@@ -132,6 +132,10 @@ Game::Game()
 
     m_input_handler.subscribe_action(SDLK_UP, SDL_KEYDOWN, &lander);
     m_input_handler.subscribe_action(SDLK_UP, SDL_KEYUP, &lander);
+    m_input_handler.subscribe_action(SDLK_LEFT, SDL_KEYDOWN, &lander);
+    m_input_handler.subscribe_action(SDLK_LEFT, SDL_KEYUP, &lander);
+    m_input_handler.subscribe_action(SDLK_RIGHT, SDL_KEYDOWN, &lander);
+    m_input_handler.subscribe_action(SDLK_RIGHT, SDL_KEYUP, &lander);
 
     // lander.set_position(SDL_Point{250, 0});
     // ui.set_position(SDL_Point{250, 0});

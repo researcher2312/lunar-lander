@@ -85,7 +85,6 @@ Lander::Lander()
     chassis->set_points(test);
     physics = new RigidBody(1000);
     physics->set_position({50, 0});
-    physics->set_rotation_speed(0.03);
     engine_on = false;
 }
 
@@ -103,7 +102,7 @@ void Lander::draw(Renderer& renderer)
 void Lander::update(float frame_time)
 {
     if(engine_on) {
-        physics->apply_force({0, -20});
+        physics->apply_force(rotate_point(SDL_FPoint{0, -20}, physics->get_rotation()));
     }
     physics->update(frame_time);
     chassis->set_position(physics->get_position());
@@ -112,12 +111,36 @@ void Lander::update(float frame_time)
 }
 
 
-void Lander::receive_key_press(SDL_Keycode)
+void Lander::receive_key_press(SDL_Keycode key)
 {
-    engine_on = true;
+    switch(key) {
+        case SDLK_UP:
+        engine_on = true;
+        break;
+
+        case SDLK_LEFT:
+        physics->set_rotation_speed(-0.02);
+        break;
+
+        case SDLK_RIGHT:
+        physics->set_rotation_speed(0.02);
+        break;
+    }
 }
 
-void Lander::receive_key_release(SDL_Keycode)
+void Lander::receive_key_release(SDL_Keycode key)
 {
-    engine_on = false;
+    switch(key) {
+        case SDLK_UP:
+        engine_on = false;
+        break;
+
+        case SDLK_LEFT:
+        physics->set_rotation_speed(0);
+        break;
+
+        case SDLK_RIGHT:
+        physics->set_rotation_speed(0);
+        break;
+    }
 }
