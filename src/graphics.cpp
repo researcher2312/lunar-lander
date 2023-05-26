@@ -24,12 +24,6 @@ void GraphicalPoints::set_points(std::vector<SDL_Point>& new_points)
     points = std::move(new_points);
 }
 
-SDL_Point rotate_point(const SDL_Point point, float angle)
-{
-    return SDL_Point{int(point.x*cos(angle)-point.y*sin(angle)),
-                     int(point.y*cos(angle)+point.x*sin(angle))};
-}
-
 /*!
  * @brief Applies rotation around root point
  * 

@@ -1,5 +1,6 @@
 #include <random>
 #include <iostream>
+#include "utils.h"
 #include "game.h"
 #include "user_objects.h"
 #include "lander_points.h"

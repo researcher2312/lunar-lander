@@ -19,6 +19,7 @@ set(SOURCES
     src/graphics.cpp
     src/ui.cpp
     src/physics.cpp
+    src/utils.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

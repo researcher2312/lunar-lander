@@ -24,3 +24,6 @@ inline SDL_FPoint operator*(const float& a, const SDL_FPoint& b)
 {
     return SDL_FPoint{b.x*a, b.y*a};
 }
+
+SDL_Point rotate_point(const SDL_Point point, float angle);
+SDL_FPoint rotate_point(const SDL_FPoint point, float angle);
