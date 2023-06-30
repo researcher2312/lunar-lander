@@ -57,6 +57,7 @@ public:
     auto get_size() const{return points.size();};
     void transform_points();
     void rotate_points();
+    void stretch_points(float x, float y);
     bool points_are_connected;
 protected:
     std::vector<SDL_Point> points;

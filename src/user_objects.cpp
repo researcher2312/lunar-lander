@@ -82,10 +82,16 @@ Lander::Lander()
 {
     chassis = new GraphicalPoints(true);
     chassis->set_color(color::white);
-    chassis->set_points(test);
+    chassis->set_points(lander_shape);
+
+    flame = new GraphicalPoints(true);
+    flame->set_color(color::white);
+    flame->set_points(flame_shape);
+
     physics = new RigidBody(1000);
     physics->set_position({50, 0});
     engine_on = false;
+    engine_flame_percent = 0;
 }
 
 Lander::~Lander()
@@ -97,19 +103,30 @@ Lander::~Lander()
 void Lander::draw(Renderer& renderer)
 {
     chassis->invoke_renderer(renderer);
+    flame->invoke_renderer(renderer);
 }
 
 void Lander::update(float frame_time)
 {
     if(engine_on) {
-        physics->apply_force(rotate_point(SDL_FPoint{0, -20}, physics->get_rotation()));
+        if (engine_flame_percent < 100) {
+            ++engine_flame_percent;
+        }
     }
+    else if (engine_flame_percent > 0) {
+        --engine_flame_percent;
+    }
+    if (engine_flame_percent > 0){
+        physics->apply_force(rotate_point(SDL_FPoint{0, -20*engine_flame_percent/100}, physics->get_rotation()));
+    }
+
     physics->update(frame_time);
     chassis->set_position(physics->get_position());
     chassis->set_rotation(physics->get_rotation());
+
+    flame->stretch_points(1, engine_flame_percent/100);
     // std::cerr << physics->get_position().x << ' ' << physics->get_position().y << '\n';
 }
-
 
 void Lander::receive_key_press(SDL_Keycode key)
 {

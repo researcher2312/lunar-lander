@@ -7,6 +7,12 @@
 constexpr int SCREEN_WIDTH = 640;
 constexpr int SCREEN_HEIGHT = 480;
 
+/*!
+ * @brief Sets the position of the object on screen
+ *
+ * The position is set in the screen coordinates
+ * @param position The new position of the object
+ */
 void GraphicalObject::set_position(const SDL_FPoint& position)
 {
     m_screen_position.x = int(position.x);
@@ -35,6 +41,23 @@ void GraphicalPoints::rotate_points()
     std::transform(points.cbegin(), points.cend(),
                    points_transformed.begin(),
                    [angle](const SDL_Point& position){return rotate_point(position, angle);});
+}
+
+/*!
+ * @brief Applies stretching to given GraphicalPoints
+ * 
+ * @param stretch_x x axis stretch coefficient
+ * @param stretch_y y axis stretch coefficient
+ */
+void GraphicalPoints::stretch_points(float stretch_x, float stretch_y)
+{
+    std::cerr << "starting stretch\n";
+    std::transform(points.cbegin(), points.cend(),
+                   points_transformed.begin(),
+                   [stretch_x, stretch_y](const SDL_Point& position)
+                   {return SDL_Point{int(position.x*stretch_x),
+                                     int(position.y*stretch_y)};});
+    std::cerr << "finishing stretch\n";
 }
 
 /*!

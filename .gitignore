@@ -2,6 +2,7 @@
 /build
 /html
 /latex
+/doc
 *.out
 *.o
 *code*
