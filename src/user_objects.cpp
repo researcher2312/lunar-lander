@@ -103,28 +103,33 @@ Lander::~Lander()
 void Lander::draw(Renderer& renderer)
 {
     chassis->invoke_renderer(renderer);
-    flame->invoke_renderer(renderer);
+    if (engine_flame_percent > 0) {
+        flame->invoke_renderer(renderer);
+    }
 }
 
 void Lander::update(float frame_time)
 {
     if(engine_on) {
         if (engine_flame_percent < 100) {
-            ++engine_flame_percent;
+            engine_flame_percent+=4;
         }
     }
     else if (engine_flame_percent > 0) {
-        --engine_flame_percent;
+        engine_flame_percent-=4;
     }
     if (engine_flame_percent > 0){
-        physics->apply_force(rotate_point(SDL_FPoint{0, -20*engine_flame_percent/100}, physics->get_rotation()));
+        physics->apply_force(rotate_point(SDL_FPoint{0, -0.5*engine_flame_percent}, physics->get_rotation()));
     }
 
     physics->update(frame_time);
     chassis->set_position(physics->get_position());
     chassis->set_rotation(physics->get_rotation());
 
-    flame->stretch_points(1, engine_flame_percent/100);
+    flame->set_position(physics->get_position());
+    flame->set_rotation(physics->get_rotation());
+
+    flame->set_stretch(SDL_FPoint{1, float(engine_flame_percent/100.0)});
     // std::cerr << physics->get_position().x << ' ' << physics->get_position().y << '\n';
 }
 

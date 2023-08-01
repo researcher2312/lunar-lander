@@ -27,3 +27,4 @@ inline SDL_FPoint operator*(const float& a, const SDL_FPoint& b)
 
 SDL_Point rotate_point(const SDL_Point point, float angle);
 SDL_FPoint rotate_point(const SDL_FPoint point, float angle);
+SDL_Point stretch_point(const SDL_Point point, float stretch_x, float stretch_y);

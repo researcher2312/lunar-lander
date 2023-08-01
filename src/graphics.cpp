@@ -27,20 +27,24 @@ void GraphicalPoints::invoke_renderer(Renderer& renderer)
 
 void GraphicalPoints::set_points(std::vector<SDL_Point>& new_points)
 {
-    points = std::move(new_points);
+    points_original = std::move(new_points);
 }
 
 /*!
  * @brief Applies rotation around root point
  * 
  * The points are rotated according to internal m_rotation variable
+ * 
+ * @param points the points which will be rotated
  */
-void GraphicalPoints::rotate_points()
+std::vector<SDL_Point> GraphicalPoints::rotate_points(std::vector<SDL_Point> points)
 {
+    std::vector<SDL_Point> new_points(get_size());
     float angle = m_rotation;
     std::transform(points.cbegin(), points.cend(),
-                   points_transformed.begin(),
+                   new_points.begin(),
                    [angle](const SDL_Point& position){return rotate_point(position, angle);});
+    return new_points;
 }
 
 /*!
@@ -49,15 +53,15 @@ void GraphicalPoints::rotate_points()
  * @param stretch_x x axis stretch coefficient
  * @param stretch_y y axis stretch coefficient
  */
-void GraphicalPoints::stretch_points(float stretch_x, float stretch_y)
+std::vector<SDL_Point> GraphicalPoints::stretch_points(std::vector<SDL_Point> points)
 {
-    std::cerr << "starting stretch\n";
+    std::vector<SDL_Point> new_points(get_size());
+    auto stretch = m_stretch;
     std::transform(points.cbegin(), points.cend(),
-                   points_transformed.begin(),
-                   [stretch_x, stretch_y](const SDL_Point& position)
-                   {return SDL_Point{int(position.x*stretch_x),
-                                     int(position.y*stretch_y)};});
-    std::cerr << "finishing stretch\n";
+                new_points.begin(),
+                [stretch](const SDL_Point& position)
+                {return stretch_point(position, stretch.x, stretch.y);});
+    return new_points;
 }
 
 /*!
@@ -66,8 +70,7 @@ void GraphicalPoints::stretch_points(float stretch_x, float stretch_y)
  */
 void GraphicalPoints::transform_points()
 {
-    points_transformed = points;
-    rotate_points();
+    points_transformed = rotate_points(stretch_points(points_original));
 }
 
 void GraphicalText::invoke_renderer(Renderer& renderer)
