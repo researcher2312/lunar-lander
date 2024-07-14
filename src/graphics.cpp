@@ -114,8 +114,8 @@ void GraphicalGeometry::invoke_renderer(Renderer& renderer)
 
 Renderer::Renderer(SDL_Window* window)
 {
-    fonts[TITLE_FONT] = TTF_OpenFont("../resources/oscilloscope.ttf",35);
-    fonts[UI_FONT] = TTF_OpenFont("../resources/oscilloscope.ttf",15);
+    fonts[TITLE_FONT] = TTF_OpenFont("resources/oscilloscope.ttf",35);
+    fonts[UI_FONT] = TTF_OpenFont("resources/oscilloscope.ttf",15);
     renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     set_drawing_color(color::white);
     SDL_RenderClear(renderer);
@@ -160,6 +160,7 @@ void Renderer::render_texture_from_text(GraphicalText* rendered)
     SDL_Surface* textSurface = TTF_RenderText_Solid(fonts[rendered->get_font()],rendered->get_text(),rendered->get_color());
     if (textSurface == NULL) {
         printf("Unable to render text surface! SDL_ttf Error: %s\n",TTF_GetError());
+        return;
     }
     else {
         //Create texture from surface pixels

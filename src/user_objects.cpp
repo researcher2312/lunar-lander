@@ -119,7 +119,7 @@ void Lander::update(float frame_time)
         engine_flame_percent-=4;
     }
     if (engine_flame_percent > 0){
-        physics->apply_force(rotate_point(SDL_FPoint{0, -0.5*engine_flame_percent}, physics->get_rotation()));
+        physics->apply_force(rotate_point(SDL_FPoint{0, float(-0.5*engine_flame_percent)}, physics->get_rotation()));
     }
 
     physics->update(frame_time);
