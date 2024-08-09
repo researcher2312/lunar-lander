@@ -3,10 +3,17 @@
 #include <cmath>
 #include "utils.h"
 #include "graphics.h"
+#include "oscilloscope_ttf.h"
 
 constexpr int SCREEN_WIDTH = 640;
 constexpr int SCREEN_HEIGHT = 480;
 
+/*!
+ * @brief Sets the position of the object on screen
+ *
+ * The position is set in the screen coordinates
+ * @param position The new position of the object
+ */
 void GraphicalObject::set_position(const SDL_FPoint& position)
 {
     m_screen_position.x = int(position.x);
@@ -21,20 +28,41 @@ void GraphicalPoints::invoke_renderer(Renderer& renderer)
 
 void GraphicalPoints::set_points(std::vector<SDL_Point>& new_points)
 {
-    points = std::move(new_points);
+    points_original = std::move(new_points);
 }
 
 /*!
  * @brief Applies rotation around root point
  * 
  * The points are rotated according to internal m_rotation variable
+ * 
+ * @param points the points which will be rotated
  */
-void GraphicalPoints::rotate_points()
+std::vector<SDL_Point> GraphicalPoints::rotate_points(std::vector<SDL_Point> points)
 {
+    std::vector<SDL_Point> new_points(get_size());
     float angle = m_rotation;
     std::transform(points.cbegin(), points.cend(),
-                   points_transformed.begin(),
+                   new_points.begin(),
                    [angle](const SDL_Point& position){return rotate_point(position, angle);});
+    return new_points;
+}
+
+/*!
+ * @brief Applies stretching to given GraphicalPoints
+ * 
+ * @param stretch_x x axis stretch coefficient
+ * @param stretch_y y axis stretch coefficient
+ */
+std::vector<SDL_Point> GraphicalPoints::stretch_points(std::vector<SDL_Point> points)
+{
+    std::vector<SDL_Point> new_points(get_size());
+    auto stretch = m_stretch;
+    std::transform(points.cbegin(), points.cend(),
+                new_points.begin(),
+                [stretch](const SDL_Point& position)
+                {return stretch_point(position, stretch.x, stretch.y);});
+    return new_points;
 }
 
 /*!
@@ -43,8 +71,7 @@ void GraphicalPoints::rotate_points()
  */
 void GraphicalPoints::transform_points()
 {
-    points_transformed = points;
-    rotate_points();
+    points_transformed = rotate_points(stretch_points(points_original));
 }
 
 void GraphicalText::invoke_renderer(Renderer& renderer)
@@ -88,8 +115,10 @@ void GraphicalGeometry::invoke_renderer(Renderer& renderer)
 
 Renderer::Renderer(SDL_Window* window)
 {
-    fonts[TITLE_FONT] = TTF_OpenFont("../resources/oscilloscope.ttf",35);
-    fonts[UI_FONT] = TTF_OpenFont("../resources/oscilloscope.ttf",15);
+    SDL_RWops* font_raw_data = SDL_RWFromConstMem(oscilloscope_ttf_start, oscilloscope_ttf_size);
+    SDL_RWops* font_raw_data2 = SDL_RWFromConstMem(oscilloscope_ttf_start, oscilloscope_ttf_size);
+    fonts[TITLE_FONT] = TTF_OpenFontRW(font_raw_data, 1, 35);
+    fonts[UI_FONT] = TTF_OpenFontRW(font_raw_data2, 1, 15);
     renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     set_drawing_color(color::white);
     SDL_RenderClear(renderer);
@@ -134,6 +163,7 @@ void Renderer::render_texture_from_text(GraphicalText* rendered)
     SDL_Surface* textSurface = TTF_RenderText_Solid(fonts[rendered->get_font()],rendered->get_text(),rendered->get_color());
     if (textSurface == NULL) {
         printf("Unable to render text surface! SDL_ttf Error: %s\n",TTF_GetError());
+        return;
     }
     else {
         //Create texture from surface pixels

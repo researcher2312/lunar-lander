@@ -22,6 +22,8 @@ set(SOURCES
     src/utils.cpp
 )
 
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -ggdb -Wall")
+
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 

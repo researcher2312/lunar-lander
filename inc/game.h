@@ -50,7 +50,7 @@ private:
 /**
  * @brief Main class to manage the game components.
  * 
- * In th0 future this class will be changed to a representation of just one game
+ * @todo In the future this class will be changed to a representation of just one game
  * state, and the game will consist of multiple following states.
  */
 class Game {

@@ -38,9 +38,11 @@ public:
     void set_position(const SDL_Point& position){m_screen_position = position;};
     void set_position(const SDL_FPoint& position);
     void set_rotation(const float rotation){m_rotation = rotation;};
+    void set_stretch(const SDL_FPoint &stretch){m_stretch = stretch;};
 protected:
     SDL_Color m_color;
     float m_rotation = 0;
+    SDL_FPoint m_stretch = {1,1};
     SDL_Point m_screen_position = ROOT_ZERO;
 };
 
@@ -54,12 +56,13 @@ public:
     void invoke_renderer(Renderer&) override final;
     const std::vector<SDL_Point>& get_points() const {return points_transformed;};
     void set_points(std::vector<SDL_Point>&);
-    auto get_size() const{return points.size();};
+    auto get_size() const{return points_original.size();};
     void transform_points();
-    void rotate_points();
+    std::vector<SDL_Point> rotate_points(std::vector<SDL_Point> points);
+    std::vector<SDL_Point> stretch_points(std::vector<SDL_Point> points);
     bool points_are_connected;
 protected:
-    std::vector<SDL_Point> points;
+    std::vector<SDL_Point> points_original;
     std::vector<SDL_Point> points_transformed;
 };
 

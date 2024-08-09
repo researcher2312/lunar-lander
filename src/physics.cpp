@@ -105,7 +105,7 @@ void RigidBody::set_rotation_speed(float rotation_speed)
 }
 
 /*!
- * @brief Apply fore to the rigidbody
+ * @brief Apply force to the rigidbody
  *
  * The force is deleted in the next physics update
  * 

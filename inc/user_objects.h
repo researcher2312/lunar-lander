@@ -39,6 +39,8 @@ public:
     void receive_key_release(SDL_Keycode) override;
 private:
     bool engine_on;
+    int engine_flame_percent;
     GraphicalPoints* chassis;
+    GraphicalPoints* flame;
     RigidBody* physics;
 };
