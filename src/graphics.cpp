@@ -3,6 +3,7 @@
 #include <cmath>
 #include "utils.h"
 #include "graphics.h"
+#include "oscilloscope_ttf.h"
 
 constexpr int SCREEN_WIDTH = 640;
 constexpr int SCREEN_HEIGHT = 480;
@@ -114,8 +115,10 @@ void GraphicalGeometry::invoke_renderer(Renderer& renderer)
 
 Renderer::Renderer(SDL_Window* window)
 {
-    fonts[TITLE_FONT] = TTF_OpenFont("resources/oscilloscope.ttf",35);
-    fonts[UI_FONT] = TTF_OpenFont("resources/oscilloscope.ttf",15);
+    SDL_RWops* font_raw_data = SDL_RWFromConstMem(oscilloscope_ttf_start, oscilloscope_ttf_size);
+    SDL_RWops* font_raw_data2 = SDL_RWFromConstMem(oscilloscope_ttf_start, oscilloscope_ttf_size);
+    fonts[TITLE_FONT] = TTF_OpenFontRW(font_raw_data, 1, 35);
+    fonts[UI_FONT] = TTF_OpenFontRW(font_raw_data2, 1, 15);
     renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     set_drawing_color(color::white);
     SDL_RenderClear(renderer);
