@@ -3,13 +3,9 @@ cmake_minimum_required(VERSION 3.10)
 project(lunar-lander VERSION 0.1
 		     LANGUAGES CXX)
 
-INCLUDE(FindPkgConfig)
+find_package(SDL2_ttf REQUIRED)
+find_package(SDL2 REQUIRED)
 
-PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2>=2.20.0)
-PKG_SEARCH_MODULE(SDL2_TTF REQUIRED SDL2_ttf)
-
-# find_package(SDL2 REQUIRED)
-# find_package(SDL2_ttf REQUIRED)
 
 set(SOURCES
     src/main.cpp
@@ -27,9 +23,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -ggdb -Wall")
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES} ${SDL2_TTF_LIBRARIES})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
-
+target_link_libraries(${PROJECT_NAME} sdl_ttf::sdl_ttf SDL2::SDL2main)
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
