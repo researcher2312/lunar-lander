@@ -1,0 +1,19 @@
+Standard: c++20
+BasedOnStyle: LLVM
+
+PointerAlignment: Left
+
+ColumnLimit: 100
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+SpaceBeforeInheritanceColon: false
+BreakBeforeBraces: Stroustrup
+
+#IndentAccessModifiers: false
+#AccessModifierOffset: -4
+
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: Consecutive
+AlignOperands: AlignAfterOperator

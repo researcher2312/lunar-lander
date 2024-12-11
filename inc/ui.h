@@ -1,16 +1,17 @@
 #pragma once
 
-#include <list>
-#include <SDL.h>
-#include "graphics.h"
 #include "game_object.h"
+#include "graphics.h"
+#include <SDL.h>
+#include <list>
 
 class UI: public GameObject {
-public:
+  public:
     UI();
     ~UI();
     void draw(Renderer&) override;
     void update(float) override;
-private:
+
+  private:
     std::vector<GraphicalText*> ui_elements;
 };
